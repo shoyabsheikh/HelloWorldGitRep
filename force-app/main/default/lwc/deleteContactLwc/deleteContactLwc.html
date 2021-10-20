@@ -1,0 +1,23 @@
+<template>
+    <lightning-card title="Delete Contact Record in LWC" icon-name="custom:custom14">
+         <table border="1" cellspacing="0" cellpadding="5" style="border-collapse:collapse;" class="tblColPad">
+             <tr>
+                 <th>First Name</th>
+                 <th>Last Name</th>
+                 <th>Email</th>
+                 <th> </th>
+             </tr>
+             <template for:each={getContact.data} for:item="conItem">
+                 <tr key={conItem.Id}>
+                     <td>{conItem.FirstName}</td>
+                     <td>{conItem.LastName}</td>
+                     <td>{conItem.Email}</td>
+                     <td><lightning-button label="Delete" size="small" variant="neutral" onclick={handleContactDelete} value={conItem.Id} icon-name="utility:delete" icon-position="right" class="deleteButton"></lightning-button></td>
+                 </tr>
+             </template>
+         </table>
+
+<br/><br/>
+    <p><img src="https://www.w3web.net/wp-content/uploads/2021/05/thumbsUpLike.png" width="25" height="25" style="vertical-align:top; margin-right:10px;"/> <strong> <span style="font-size:15px; font-style:italic; display:inline-block; margin-right:5px;">Don't forget to check out:-</span> <a href="https://www.w3web.net/" target="_blank" style="text-decoration:none;" rel="noopener noreferrer">An easy way to learn step-by-step online free tutorial, To know more Click  <span style="color:#ff8000; font-size:18px;">Here..</span></a></strong></p>
+    </lightning-card>
+</template>

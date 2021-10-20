@@ -1,0 +1,18 @@
+<template>
+    <lightning-card title="How to pass value from child to parent component in lwc" icon-name="custom:custom11">
+   
+        <div class="slds-wrap slds-grid">
+            <div class="slds-col slds-size_12-of-12 slds-p-horizontal--small slds-m-bottom--medium">
+            
+                <h3><b>lwcChild Component</b></h3>
+                <c-lwc-child ondemoevent={handleChange}></c-lwc-child>
+
+                 <h3><b>lwcParent Component</b></h3>
+                 <b style="color:brown; margin-top:15px;">The Name Value Is:-</b> {currentVal}
+            </div>
+        </div>
+
+ <br/><br/>
+    <p><img src="https://www.w3web.net/wp-content/uploads/2021/05/thumbsUpLike.png" width="25" height="25" style="vertical-align:top; margin-right:10px;"/> <strong> <span style="font-size:15px; font-style:italic; display:inline-block; margin-right:5px;">Don't forget to check out:-</span> <a href="https://www.w3web.net/" target="_blank" style="text-decoration:none;" rel="noopener noreferrer">An easy way to learn step-by-step online free tutorial, To know more Click  <span style="color:#ff8000; font-size:18px;">Here..</span></a></strong></p>
+</lightning-card>
+</template>
