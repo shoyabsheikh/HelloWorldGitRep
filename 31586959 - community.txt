@@ -1,0 +1,104 @@
+Followed KA https://org62.lightning.force.com/lightning/r/Knowledge__kav/ka13y000005HWEnAAO/view
+
+
+1. Seek Justification for Unique Site Subdomain Change
+
+They are re-branding their business.
+
+
+2. Tell customer and seek agreement on
+
+Done
+
+3. Ensure domain is not restricted from use
+
+go not restricted.
+
+STEP 1.
+
+C:\Users\shoyab.sheikh>ping  stenggpartner.force.com
+Ping request could not find host stenggpartner.force.com. Please check the name and try again.
+
+NSLOOK UP for NEW DOMAIN RETURING VALUE because there is a community domain with same name. But on the same request we will updating the community domain to stenggpartner so this will not return.
+
+C:\Users\shoyab.sheikh>nslookup stengg.force.com
+Server:  bom-dc-wp001.internal.salesforce.com
+Address:  10.192.100.9
+
+Non-authoritative answer:
+Name:    ap16-ukb.ukb.r.force.com
+Addresses:  101.53.160.216
+          101.53.163.88
+          101.53.163.216
+Aliases:  stengg.force.com
+          ap16.force.com
+          ap16-ukb.force.com
+
+OLD DOMAIN:
+C:\Users\shoyab.sheikh>nslookup steeng.force.com
+Server:  bom-dc-wp001.internal.salesforce.com
+Address:  10.192.100.9
+
+Non-authoritative answer:
+Name:    ap16-ukb.ukb.r.force.com
+Addresses:  101.53.162.88
+          101.53.160.216
+          101.53.161.88
+Aliases:  steeng.force.com
+          aka.ap16.force.com
+          ap16.force.com
+          ap16-ukb.force.com
+
+PING:
+
+OLD :
+C:\Users\shoyab.sheikh>ping steeng.force.com
+
+Pinging ap16-ukb.ukb.r.force.com [101.53.163.88] with 32 bytes of data:
+Reply from 101.53.163.88: bytes=32 time=169ms TTL=244
+Reply from 101.53.163.88: bytes=32 time=169ms TTL=244
+Reply from 101.53.163.88: bytes=32 time=173ms TTL=244
+Reply from 101.53.163.88: bytes=32 time=186ms TTL=244
+
+Ping statistics for 101.53.163.88:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 169ms, Maximum = 186ms, Average = 174ms
+
+
+NEW:
+PING for NEW DOMAIN RETURING VALUE because there is a community domain with same name. But on the same request we will updating the community domain to stenggpartner so this will not return.
+
+C:\Users\shoyab.sheikh>ping stengg.force.com
+
+Pinging ap16-ukb.ukb.r.force.com [101.53.160.216] with 32 bytes of data:
+Reply from 101.53.160.216: bytes=32 time=169ms TTL=245
+Reply from 101.53.160.216: bytes=32 time=194ms TTL=245
+Reply from 101.53.160.216: bytes=32 time=169ms TTL=245
+Reply from 101.53.160.216: bytes=32 time=169ms TTL=245
+
+Ping statistics for 101.53.160.216:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 169ms, Maximum = 194ms, Average = 175ms
+
+
+STEP 2.
+Go to BT and navigate to "All Organizations" link (/setup/org/allOrganizationList.jsp)
+https://bt1.my.salesforce.com/setup/org/allOrganizationList.jsp?fcf=00B0P000004rEt1
+
+I found 1 row return with value as:
+
+Unique Chatter Experience Subdomain : stengg
+Unique Site Subdomain :  steeng
+
+
+STEP 3. 
+
+Search in splunk: index=<org instance> earliest=-15m *steeng* . 
+0 results 
+
+Request:
+Update Unique Site Subdomain
+from steeng
+to stengg

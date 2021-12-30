@@ -1,3 +1,3 @@
 <aura:application>
- <c:lwdDeleteMultipleRecord/>
+ <c:deleteRecord/>
 </aura:application>	

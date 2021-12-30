@@ -1,0 +1,1230 @@
+Debug Details
+How the Interview Started
+Phil Hill (0050N000007Gwk3) started the debug run as this running user: James Hollingsworth (0050N000007Jo6E).
+API Version for Running the Flow: 52
+Some of this flow's variables were set when the interview started.
+OpportunityID = 0062500000RKRYNAA5
+GET RECORDS: Find related Opportunity
+Find all Opportunity records where:
+Id Equals {!OpportunityID} (0062500000RKRYNAA5)
+Store the values of these currently referenced fields in Find_related_Opportunity: Billing_Contact__c, Opportunity_Type__c, AccountId, Contract_Start_Date__c, Prevent_auto_renewal_split_invoice__c, StageName, Amount, Invoice_number__c, Delay_invoicing__c, MSS__c, Contract_End_Date__c, Cost_of_Sale__c, CloseDate, Name, Opportunity_link__c, Partner_Account__c, Freshdesk_Link__c, OwnerId, Freshdesk_Ticket__c, Purchase_Order__c, Number_of_Days__c, Id
+Because Find_related_Opportunity is passed to an action, subflow, or Lightning component, store the values of all Opportunity fields that the running user has access to.
+Result
+Successfully found records.
+ASSIGNMENT: Original Opportunity Values
+{!OriginalOpportunityContractEndDate} Equals {!Find_related_Opportunity.Contract_End_Date__c}
+Result
+{!OriginalOpportunityContractEndDate} = "31 October 2022"
+GET RECORDS: Get Opportunity product
+Find all OpportunityLineItem records where:
+OpportunityId Equals {!OpportunityID} (0062500000RKRYNAA5)
+Store the values of these fields in Get_Opportunity_product: ServiceDate, Description, Product2Id, ProductCode, PricebookEntryId, TotalPrice, Quantity, Item_Cost_to_Xynomix__c, SortOrder, Id, Name
+Result
+Successfully found records.
+DECISION: Opp Stage decision
+Skipped this outcome because its conditions weren't met: Ready_to_Invoice_Won_Support
+Outcome conditions:
+1. {!Find_related_Opportunity.StageName} (Opportunity) Equals Ready to Invoice - Won
+2. {!Find_related_Opportunity.Opportunity_Type__c} (Support) Equals Support
+Logic: All conditions must be true (AND)
+
+Skipped this outcome because its conditions weren't met: Invoiced
+Outcome conditions:
+{!Find_related_Opportunity.StageName} (Opportunity) Equals Invoiced
+
+Default outcome executed.
+Transaction Committed
+Any records that the flow was ready to create, update, or delete were committed to the database.
+SCREEN: Split billing info
+Display Text: Intro_text
+Value at run time:
+
+You have selected to split your opportunity for billing purposes. This will split out the opportunity amount evenly across each invoice
+
+
+
+Date: Please_enter_the_Contract_Start_Date_for_the_Opportunity
+Label: Please enter the Contract Start Date for the Opportunity
+Value at run time: 01 November 2021
+
+Date: Please_enter_the_Contract_End_Date_for_the_Opportunity
+Label: Please enter the Contract End Date for the Opportunity
+Value at run time: 31 October 2022
+
+Number: Contract_length_Months
+Label: Contract length (Months)
+Value at run time: 12
+
+Number: Billing_Frequency_months
+Label: Billing Frequency (months)
+Value at run time: 3
+
+Date: Date_for_2nd_Invoice
+Label: Date for 2nd Invoice
+Value at run time: 31 December 2021
+
+Dropdown List: Opportunity_Stage
+Label: Opportunity Stage
+Data Type: Text
+Choices selected at runtime:
+Choice selected at runtime: Ready to Invoice - Won (OppStages)
+Choice value: Ready to Invoice - Won
+
+
+Selected Navigation Button: NEXT
+CREATE RECORDS: Create Split billing link record
+Create one Split_billing_link__c record where:
+Billing_Frequency_months__c = {!Billing_Frequency_months} (3)
+Contract_Length_months__c = {!Contract_length_Months} (12)
+OwnerId = {!Find_related_Opportunity.OwnerId} (0050N000007Jo6EQAS)
+Result
+A record is ready to be created when the next screen, pause, or local action is executed or when the interview finishes.
+a0C2500000ExwPWEAZ
+ASSIGNMENT: AssignOppStage
+{!OppStageText} Equals {!Opportunity_Stage}
+Result
+{!OppStageText} = "Ready to Invoice - Won"
+DECISION: Valid Opp stage Selected?
+Skipped this outcome because its conditions weren't met: Invalid_Opp_Stage
+Outcome conditions:
+1. {!Opportunity_Stage} (Ready to Invoice - Won) Equals {!BlankChoiceSet} (-)
+2. {!Opportunity_Stage} (Ready to Invoice - Won) Equals Invoiced
+3. {!Opportunity_Stage} (Ready to Invoice - Won) Equals Pending
+4. {!Opportunity_Stage} (Ready to Invoice - Won) Equals Ready
+Logic: One condition must be true (OR)
+
+Outcome executed: OppStageClosedWonOrProject
+Outcome conditions:
+1. {!OppStageText} (Ready to Invoice - Won) Equals Ready to Invoice - Won
+2. {!OppStageText} (Ready to Invoice - Won) Equals PO Received - Won
+Logic: One condition must be true (OR)
+GET RECORDS: Get Billing Contact info
+Find all Contact records where:
+Id Equals {!Find_related_Opportunity.Billing_Contact__c} (0034G00002kZhu3QAC)
+Store the values of these fields in Get_Billing_Contact_info: Id, Name
+Result
+Successfully found records.
+Transaction Committed
+Any records that the flow was ready to create, update, or delete were committed to the database.
+SCREEN: Billing Info
+Lightning Component: PurchaseOrder
+Screen component: flowruntime:lookup
+Inputs:
+fieldApiName = (Purchase_Order__c)
+label = (Purchase Order)
+objectApiName = (Opportunity)
+required = (true)
+Outputs:
+null
+
+Display Text: PO_Link_already_entered
+Value at run time:
+
+You have already entered a PO for this opportunity:
+
+
+
+123456
+
+
+
+If this is correct please proceed, if not please return to the opportunity, remove the PO and start this process again
+
+
+
+Dropdown List: Billing_Contact
+Label: Billing Contact
+Data Type: Text
+Choices selected at runtime:
+Choice selected at runtime: (null)
+Choice value:
+
+
+Display Text: Billing_Contact_already_entered
+Value at run time:
+You have already entered a billing contact for this opportunity:
+
+
+
+Phil's test Contact
+
+
+
+If this is correct please proceed, if not please return to the opportunity, remove the billing contact and start this process again
+
+
+
+Selected Navigation Button: NEXT
+UPDATE RECORDS: Update Opportunity
+Find all Opportunity records where:
+Id Equals {!OpportunityID} (0062500000RKRYNAA5)
+Update the records’ field values.
+Amount = {!NewAmount} (£22,500.00)
+Billing_Contact__c = {!AddBillingContactIfRequired} (0034G00002kZhu3QAC)
+Contract_End_Date__c = {!FirstOpportunityContractEndDate} (31 January 2022)
+Contract_Start_Date__c = {!Please_enter_the_Contract_Start_Date_for_the_Opportunity} (01 November 2021)
+Cost_of_Sale__c = {!NewCostOfSale} (£0.00)
+Name = {!NewOppName} (Timing Test 13 quarter 1 of 4)
+Number_of_Days__c = {!NewNumberOfDays} (0.00)
+Opportunity_link__c = {!Create_Split_billing_link_record} (a0C2500000ExwPWEAZ)
+Prevent_auto_renewal_split_invoice__c = true
+Purchase_Order__c = {!AddPOIfRequired} (a0A25000006ESInEAO)
+StageName = {!Opportunity_Stage} (Ready to Invoice - Won)
+Result
+All records that meet the filter criteria are ready to be updated when the next screen, pause, or local action is executed or when the interview finishes.
+LOOP: Loop Opportunity Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 0
+Current iteration item: 00k25000007SJNrAAO
+ASSIGNMENT: Set Opportunity Product Values
+{!Loop_Opportunity_Products.Quantity} Equals {!UpdatedProductQuantity}
+{!Loop_Opportunity_Products.TotalPrice} Equals {!UpdatedTotalPrice}
+Result
+{!Loop_Opportunity_Products.TotalPrice} = "15,750"
+{!Loop_Opportunity_Products.Quantity} = "1.75"
+ASSIGNMENT: Assign Updated Line Items collection
+{!UpdatedLineItemsCollectionVar} Add {!Loop_Opportunity_Products}
+Result
+{!UpdatedLineItemsCollectionVar} = "[OpportunityLineItem (00k25000007SJNrAAO)]"
+LOOP: Loop Opportunity Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 1
+Current iteration item: 00k25000007SJNsAAO
+ASSIGNMENT: Set Opportunity Product Values
+{!Loop_Opportunity_Products.Quantity} Equals {!UpdatedProductQuantity}
+{!Loop_Opportunity_Products.TotalPrice} Equals {!UpdatedTotalPrice}
+Result
+{!Loop_Opportunity_Products.TotalPrice} = "6,750"
+{!Loop_Opportunity_Products.Quantity} = "2.25"
+ASSIGNMENT: Assign Updated Line Items collection
+{!UpdatedLineItemsCollectionVar} Add {!Loop_Opportunity_Products}
+Result
+{!UpdatedLineItemsCollectionVar} = "[OpportunityLineItem (00k25000007SJNrAAO),OpportunityLineItem (00k25000007SJNsAAO)]"
+LOOP: Loop Opportunity Products
+End Loop.
+UPDATE RECORDS: Update Quantity
+Update OpportunityLineItem records whose IDs are stored in {!UpdatedLineItemsCollectionVar}.
+Variable Values
+[ServiceDate=null,Description=null,Product2Id=01t25000006kmTZAAY,ProductCode=SQL_247_MON,PricebookEntryId=01u25000009JCWrAAO,TotalPrice=15750.000,Quantity=1.750,Item_Cost_to_Xynomix__c=null,SortOrder=null,Id=00k25000007SJNrAAO,Name=Timing Test 13 Microsoft SQL Server 24x7x365 (Per instance)]
+[ServiceDate=null,Description=null,Product2Id=01t25000006kmTaAAI,ProductCode=SQL_247_REA,PricebookEntryId=01u25000009JCWsAAO,TotalPrice=6750.000,Quantity=2.250,Item_Cost_to_Xynomix__c=null,SortOrder=null,Id=00k25000007SJNsAAO,Name=Timing Test 13 Microsoft SQL Server 9-5 (Per instance)]
+Result
+All records whose IDs are in {!UpdatedLineItemsCollectionVar} are ready to be updated when the next screen, pause, or local action is executed or when the interview finishes.
+ASSIGNMENT: Last Opp Details
+{!OppSplitNumber} Equals 1
+{!RoundOfOpps} Equals 1
+{!NextOppVar} Equals {!Find_related_Opportunity}
+Result
+{!NextOppVar} = "Opportunity (0062500000RKRYNAA5)"
+{!OppSplitNumber} = "1.00"
+{!RoundOfOpps} = "1.00"
+DECISION: Have all opportunities been created?
+Outcome executed: Moreopportunitiesrequired
+Outcome conditions:
+{!OppSplitNumber} (1.00) Does not equal {!TotalNumberofSplits} (4.00)
+ASSIGNMENT: Assign Next Opp Values
+{!NextOppVar.Id} Equals null
+{!NextOppVar.Amount} Equals {!NewAmount}
+{!NextOppVar.Billing_Contact__c} Equals {!AddBillingContactIfRequired}
+{!NextOppVar.CloseDate} Equals {!NewOppEndDate}
+{!NextOppVar.Contract_End_Date__c} Equals {!NewOppContractEndDate}
+{!NextOppVar.Contract_Start_Date__c} Equals {!NewOppContractStartDate}
+{!NextOppVar.Cost_of_Sale__c} Equals {!NewCostOfSale}
+{!NextOppVar.Delay_invoicing__c} Equals true
+{!NextOppVar.Name} Equals {!NewOppName}
+{!NextOppVar.Number_of_Days__c} Equals {!NewNumberOfDays}
+{!NextOppVar.Opportunity_link__c} Equals {!Create_Split_billing_link_record}
+{!NextOppVar.Prevent_auto_renewal_split_invoice__c} Equals true
+{!NextOppVar.StageName} Equals {!Opportunity_Stage}
+{!NextOppVar.Invoice_number__c} Equals null
+{!NextOppVar.Purchase_Order__c} Equals {!AddPOIfRequired}
+Result
+{!NextOppVar.Billing_Contact__c} = "0034G00002kZhu3QAC"
+{!NextOppVar.Amount} = "22,500"
+{!NextOppVar.Prevent_auto_renewal_split_invoice__c} = "true"
+{!NextOppVar.Purchase_Order__c} = "a0A25000006ESInEAO"
+{!NextOppVar.Contract_Start_Date__c} = "01 February 2022"
+{!NextOppVar.Delay_invoicing__c} = "true"
+{!NextOppVar.Name} = "Timing Test 13 quarter 2 of 4"
+{!NextOppVar.CloseDate} = "31 December 2021"
+{!NextOppVar.StageName} = "Ready to Invoice - Won"
+{!NextOppVar.Invoice_number__c} = "null"
+{!NextOppVar.Contract_End_Date__c} = "30 April 2022"
+{!NextOppVar.Opportunity_link__c} = "a0C2500000ExwPWEAZ"
+{!NextOppVar.Id} = "null"
+{!NextOppVar.Cost_of_Sale__c} = "0"
+{!NextOppVar.Number_of_Days__c} = "0"
+ASSIGNMENT: Update Opp Split Number
+{!OppSplitNumber} Equals {!OppSplitNumberPlus1}
+Result
+{!OppSplitNumber} = "2.00"
+DECISION: Round 1 Or 2
+Outcome executed: Round_1
+Outcome conditions:
+{!RoundOfOpps} (1.00) Equals 1
+ASSIGNMENT: Assign New Opp To Collection
+{!NewOppsCollectionVar} Add {!NextOppVar}
+Result
+{!NewOppsCollectionVar} = "[Opportunity (No ID)]"
+DECISION: Have all opportunities been created?
+Outcome executed: Moreopportunitiesrequired
+Outcome conditions:
+{!OppSplitNumber} (2.00) Does not equal {!TotalNumberofSplits} (4.00)
+ASSIGNMENT: Assign Next Opp Values
+{!NextOppVar.Id} Equals null
+{!NextOppVar.Amount} Equals {!NewAmount}
+{!NextOppVar.Billing_Contact__c} Equals {!AddBillingContactIfRequired}
+{!NextOppVar.CloseDate} Equals {!NewOppEndDate}
+{!NextOppVar.Contract_End_Date__c} Equals {!NewOppContractEndDate}
+{!NextOppVar.Contract_Start_Date__c} Equals {!NewOppContractStartDate}
+{!NextOppVar.Cost_of_Sale__c} Equals {!NewCostOfSale}
+{!NextOppVar.Delay_invoicing__c} Equals true
+{!NextOppVar.Name} Equals {!NewOppName}
+{!NextOppVar.Number_of_Days__c} Equals {!NewNumberOfDays}
+{!NextOppVar.Opportunity_link__c} Equals {!Create_Split_billing_link_record}
+{!NextOppVar.Prevent_auto_renewal_split_invoice__c} Equals true
+{!NextOppVar.StageName} Equals {!Opportunity_Stage}
+{!NextOppVar.Invoice_number__c} Equals null
+{!NextOppVar.Purchase_Order__c} Equals {!AddPOIfRequired}
+Result
+{!NextOppVar.Billing_Contact__c} = "0034G00002kZhu3QAC"
+{!NextOppVar.Amount} = "22,500"
+{!NextOppVar.Prevent_auto_renewal_split_invoice__c} = "true"
+{!NextOppVar.Purchase_Order__c} = "a0A25000006ESInEAO"
+{!NextOppVar.Contract_Start_Date__c} = "01 May 2022"
+{!NextOppVar.Delay_invoicing__c} = "true"
+{!NextOppVar.Name} = "Timing Test 13 quarter 3 of 4"
+{!NextOppVar.CloseDate} = "31 March 2022"
+{!NextOppVar.StageName} = "Ready to Invoice - Won"
+{!NextOppVar.Invoice_number__c} = "null"
+{!NextOppVar.Contract_End_Date__c} = "31 July 2022"
+{!NextOppVar.Opportunity_link__c} = "a0C2500000ExwPWEAZ"
+{!NextOppVar.Id} = "null"
+{!NextOppVar.Cost_of_Sale__c} = "0"
+{!NextOppVar.Number_of_Days__c} = "0"
+ASSIGNMENT: Update Opp Split Number
+{!OppSplitNumber} Equals {!OppSplitNumberPlus1}
+Result
+{!OppSplitNumber} = "3.00"
+DECISION: Round 1 Or 2
+Outcome executed: Round_1
+Outcome conditions:
+{!RoundOfOpps} (1.00) Equals 1
+ASSIGNMENT: Assign New Opp To Collection
+{!NewOppsCollectionVar} Add {!NextOppVar}
+Result
+{!NewOppsCollectionVar} = "[Opportunity (No ID),Opportunity (No ID)]"
+DECISION: Have all opportunities been created?
+Outcome executed: Moreopportunitiesrequired
+Outcome conditions:
+{!OppSplitNumber} (3.00) Does not equal {!TotalNumberofSplits} (4.00)
+ASSIGNMENT: Assign Next Opp Values
+{!NextOppVar.Id} Equals null
+{!NextOppVar.Amount} Equals {!NewAmount}
+{!NextOppVar.Billing_Contact__c} Equals {!AddBillingContactIfRequired}
+{!NextOppVar.CloseDate} Equals {!NewOppEndDate}
+{!NextOppVar.Contract_End_Date__c} Equals {!NewOppContractEndDate}
+{!NextOppVar.Contract_Start_Date__c} Equals {!NewOppContractStartDate}
+{!NextOppVar.Cost_of_Sale__c} Equals {!NewCostOfSale}
+{!NextOppVar.Delay_invoicing__c} Equals true
+{!NextOppVar.Name} Equals {!NewOppName}
+{!NextOppVar.Number_of_Days__c} Equals {!NewNumberOfDays}
+{!NextOppVar.Opportunity_link__c} Equals {!Create_Split_billing_link_record}
+{!NextOppVar.Prevent_auto_renewal_split_invoice__c} Equals true
+{!NextOppVar.StageName} Equals {!Opportunity_Stage}
+{!NextOppVar.Invoice_number__c} Equals null
+{!NextOppVar.Purchase_Order__c} Equals {!AddPOIfRequired}
+Result
+{!NextOppVar.Billing_Contact__c} = "0034G00002kZhu3QAC"
+{!NextOppVar.Amount} = "22,500"
+{!NextOppVar.Prevent_auto_renewal_split_invoice__c} = "true"
+{!NextOppVar.Purchase_Order__c} = "a0A25000006ESInEAO"
+{!NextOppVar.Contract_Start_Date__c} = "01 August 2022"
+{!NextOppVar.Delay_invoicing__c} = "true"
+{!NextOppVar.Name} = "Timing Test 13 quarter 4 of 4"
+{!NextOppVar.CloseDate} = "30 June 2022"
+{!NextOppVar.StageName} = "Ready to Invoice - Won"
+{!NextOppVar.Invoice_number__c} = "null"
+{!NextOppVar.Contract_End_Date__c} = "31 October 2022"
+{!NextOppVar.Opportunity_link__c} = "a0C2500000ExwPWEAZ"
+{!NextOppVar.Id} = "null"
+{!NextOppVar.Cost_of_Sale__c} = "0"
+{!NextOppVar.Number_of_Days__c} = "0"
+ASSIGNMENT: Update Opp Split Number
+{!OppSplitNumber} Equals {!OppSplitNumberPlus1}
+Result
+{!OppSplitNumber} = "4.00"
+DECISION: Round 1 Or 2
+Outcome executed: Round_1
+Outcome conditions:
+{!RoundOfOpps} (1.00) Equals 1
+ASSIGNMENT: Assign New Opp To Collection
+{!NewOppsCollectionVar} Add {!NextOppVar}
+Result
+{!NewOppsCollectionVar} = "[Opportunity (No ID),Opportunity (No ID),Opportunity (No ID)]"
+DECISION: Have all opportunities been created?
+Skipped this outcome because its conditions weren't met: Moreopportunitiesrequired
+Outcome conditions:
+{!OppSplitNumber} (4.00) Does not equal {!TotalNumberofSplits} (4.00)
+
+Default outcome executed.
+DECISION: Are Renewal Opps Required
+Outcome executed: Renewal_Opps_Are_Required
+Outcome conditions:
+1. {!Opportunity_Stage} (Ready to Invoice - Won) Equals Ready to Invoice - Won
+2. {!Find_related_Opportunity.Opportunity_Type__c} (Support) Equals Support
+3. {!RoundOfOpps} (1.00) Equals 1
+Logic: All conditions must be true (AND)
+ASSIGNMENT: Reset Opp Split Number
+{!OppSplitNumber} Equals 0
+{!RoundOfOpps} Equals 2
+Result
+{!OppSplitNumber} = "0.00"
+{!RoundOfOpps} = "2.00"
+DECISION: Have all opportunities been created?
+Outcome executed: Moreopportunitiesrequired
+Outcome conditions:
+{!OppSplitNumber} (0.00) Does not equal {!TotalNumberofSplits} (4.00)
+ASSIGNMENT: Assign Next Opp Values
+{!NextOppVar.Id} Equals null
+{!NextOppVar.Amount} Equals {!NewAmount}
+{!NextOppVar.Billing_Contact__c} Equals {!AddBillingContactIfRequired}
+{!NextOppVar.CloseDate} Equals {!NewOppEndDate}
+{!NextOppVar.Contract_End_Date__c} Equals {!NewOppContractEndDate}
+{!NextOppVar.Contract_Start_Date__c} Equals {!NewOppContractStartDate}
+{!NextOppVar.Cost_of_Sale__c} Equals {!NewCostOfSale}
+{!NextOppVar.Delay_invoicing__c} Equals true
+{!NextOppVar.Name} Equals {!NewOppName}
+{!NextOppVar.Number_of_Days__c} Equals {!NewNumberOfDays}
+{!NextOppVar.Opportunity_link__c} Equals {!Create_Split_billing_link_record}
+{!NextOppVar.Prevent_auto_renewal_split_invoice__c} Equals true
+{!NextOppVar.StageName} Equals {!Opportunity_Stage}
+{!NextOppVar.Invoice_number__c} Equals null
+{!NextOppVar.Purchase_Order__c} Equals {!AddPOIfRequired}
+Result
+{!NextOppVar.Billing_Contact__c} = "0034G00002kZhu3QAC"
+{!NextOppVar.Amount} = "22,500"
+{!NextOppVar.Prevent_auto_renewal_split_invoice__c} = "true"
+{!NextOppVar.Purchase_Order__c} = "a0A25000006ESInEAO"
+{!NextOppVar.Contract_Start_Date__c} = "01 November 2022"
+{!NextOppVar.Delay_invoicing__c} = "true"
+{!NextOppVar.Name} = "Timing Test 13 quarter 1 of 4"
+{!NextOppVar.CloseDate} = "30 September 2022"
+{!NextOppVar.StageName} = "Ready to Invoice - Won"
+{!NextOppVar.Invoice_number__c} = "null"
+{!NextOppVar.Contract_End_Date__c} = "31 January 2023"
+{!NextOppVar.Opportunity_link__c} = "a0C2500000ExwPWEAZ"
+{!NextOppVar.Id} = "null"
+{!NextOppVar.Cost_of_Sale__c} = "0"
+{!NextOppVar.Number_of_Days__c} = "0"
+ASSIGNMENT: Update Opp Split Number
+{!OppSplitNumber} Equals {!OppSplitNumberPlus1}
+Result
+{!OppSplitNumber} = "1.00"
+DECISION: Round 1 Or 2
+Skipped this outcome because its conditions weren't met: Round_1
+Outcome conditions:
+{!RoundOfOpps} (2.00) Equals 1
+
+Default outcome executed.
+ASSIGNMENT: Update Opp Values for Renewal
+{!NextOppVar.Billing_Contact__c} Equals null
+{!NextOppVar.Delay_invoicing__c} Equals false
+{!NextOppVar.Freshdesk_Link__c} Equals https://helpdesk.xynomix.com/a/tickets/
+{!NextOppVar.Freshdesk_Ticket__c} Equals null
+{!NextOppVar.Purchase_Order__c} Equals null
+{!NextOppVar.MSS__c} Equals null
+{!NextOppVar.Name} Equals {!NewRenewalOppName}
+{!NextOppVar.StageName} Equals Renewal
+Result
+{!NextOppVar.Billing_Contact__c} = "null"
+{!NextOppVar.MSS__c} = "null"
+{!NextOppVar.StageName} = "Renewal"
+{!NextOppVar.Freshdesk_Link__c} = "https://helpdesk.xynomix.com/a/tickets/"
+{!NextOppVar.Purchase_Order__c} = "null"
+{!NextOppVar.Freshdesk_Ticket__c} = "null"
+{!NextOppVar.Delay_invoicing__c} = "false"
+{!NextOppVar.Name} = "Renewal - Timing Test 13 quarter 1 of 4"
+ASSIGNMENT: Assign New Opp To Collection
+{!NewOppsCollectionVar} Add {!NextOppVar}
+Result
+{!NewOppsCollectionVar} = "[Opportunity (No ID),Opportunity (No ID),Opportunity (No ID),Opportunity (No ID)]"
+DECISION: Have all opportunities been created?
+Outcome executed: Moreopportunitiesrequired
+Outcome conditions:
+{!OppSplitNumber} (1.00) Does not equal {!TotalNumberofSplits} (4.00)
+ASSIGNMENT: Assign Next Opp Values
+{!NextOppVar.Id} Equals null
+{!NextOppVar.Amount} Equals {!NewAmount}
+{!NextOppVar.Billing_Contact__c} Equals {!AddBillingContactIfRequired}
+{!NextOppVar.CloseDate} Equals {!NewOppEndDate}
+{!NextOppVar.Contract_End_Date__c} Equals {!NewOppContractEndDate}
+{!NextOppVar.Contract_Start_Date__c} Equals {!NewOppContractStartDate}
+{!NextOppVar.Cost_of_Sale__c} Equals {!NewCostOfSale}
+{!NextOppVar.Delay_invoicing__c} Equals true
+{!NextOppVar.Name} Equals {!NewOppName}
+{!NextOppVar.Number_of_Days__c} Equals {!NewNumberOfDays}
+{!NextOppVar.Opportunity_link__c} Equals {!Create_Split_billing_link_record}
+{!NextOppVar.Prevent_auto_renewal_split_invoice__c} Equals true
+{!NextOppVar.StageName} Equals {!Opportunity_Stage}
+{!NextOppVar.Invoice_number__c} Equals null
+{!NextOppVar.Purchase_Order__c} Equals {!AddPOIfRequired}
+Result
+{!NextOppVar.Billing_Contact__c} = "0034G00002kZhu3QAC"
+{!NextOppVar.Amount} = "22,500"
+{!NextOppVar.Prevent_auto_renewal_split_invoice__c} = "true"
+{!NextOppVar.Purchase_Order__c} = "a0A25000006ESInEAO"
+{!NextOppVar.Contract_Start_Date__c} = "01 February 2023"
+{!NextOppVar.Delay_invoicing__c} = "true"
+{!NextOppVar.Name} = "Timing Test 13 quarter 2 of 4"
+{!NextOppVar.CloseDate} = "31 December 2022"
+{!NextOppVar.StageName} = "Ready to Invoice - Won"
+{!NextOppVar.Invoice_number__c} = "null"
+{!NextOppVar.Contract_End_Date__c} = "30 April 2023"
+{!NextOppVar.Opportunity_link__c} = "a0C2500000ExwPWEAZ"
+{!NextOppVar.Id} = "null"
+{!NextOppVar.Cost_of_Sale__c} = "0"
+{!NextOppVar.Number_of_Days__c} = "0"
+ASSIGNMENT: Update Opp Split Number
+{!OppSplitNumber} Equals {!OppSplitNumberPlus1}
+Result
+{!OppSplitNumber} = "2.00"
+DECISION: Round 1 Or 2
+Skipped this outcome because its conditions weren't met: Round_1
+Outcome conditions:
+{!RoundOfOpps} (2.00) Equals 1
+
+Default outcome executed.
+ASSIGNMENT: Update Opp Values for Renewal
+{!NextOppVar.Billing_Contact__c} Equals null
+{!NextOppVar.Delay_invoicing__c} Equals false
+{!NextOppVar.Freshdesk_Link__c} Equals https://helpdesk.xynomix.com/a/tickets/
+{!NextOppVar.Freshdesk_Ticket__c} Equals null
+{!NextOppVar.Purchase_Order__c} Equals null
+{!NextOppVar.MSS__c} Equals null
+{!NextOppVar.Name} Equals {!NewRenewalOppName}
+{!NextOppVar.StageName} Equals Renewal
+Result
+{!NextOppVar.Billing_Contact__c} = "null"
+{!NextOppVar.MSS__c} = "null"
+{!NextOppVar.StageName} = "Renewal"
+{!NextOppVar.Freshdesk_Link__c} = "https://helpdesk.xynomix.com/a/tickets/"
+{!NextOppVar.Purchase_Order__c} = "null"
+{!NextOppVar.Freshdesk_Ticket__c} = "null"
+{!NextOppVar.Delay_invoicing__c} = "false"
+{!NextOppVar.Name} = "Renewal - Timing Test 13 quarter 2 of 4"
+ASSIGNMENT: Assign New Opp To Collection
+{!NewOppsCollectionVar} Add {!NextOppVar}
+Result
+{!NewOppsCollectionVar} = "[Opportunity (No ID),Opportunity (No ID),Opportunity (No ID),Opportunity (No ID),Opportunity (No ID)]"
+DECISION: Have all opportunities been created?
+Outcome executed: Moreopportunitiesrequired
+Outcome conditions:
+{!OppSplitNumber} (2.00) Does not equal {!TotalNumberofSplits} (4.00)
+ASSIGNMENT: Assign Next Opp Values
+{!NextOppVar.Id} Equals null
+{!NextOppVar.Amount} Equals {!NewAmount}
+{!NextOppVar.Billing_Contact__c} Equals {!AddBillingContactIfRequired}
+{!NextOppVar.CloseDate} Equals {!NewOppEndDate}
+{!NextOppVar.Contract_End_Date__c} Equals {!NewOppContractEndDate}
+{!NextOppVar.Contract_Start_Date__c} Equals {!NewOppContractStartDate}
+{!NextOppVar.Cost_of_Sale__c} Equals {!NewCostOfSale}
+{!NextOppVar.Delay_invoicing__c} Equals true
+{!NextOppVar.Name} Equals {!NewOppName}
+{!NextOppVar.Number_of_Days__c} Equals {!NewNumberOfDays}
+{!NextOppVar.Opportunity_link__c} Equals {!Create_Split_billing_link_record}
+{!NextOppVar.Prevent_auto_renewal_split_invoice__c} Equals true
+{!NextOppVar.StageName} Equals {!Opportunity_Stage}
+{!NextOppVar.Invoice_number__c} Equals null
+{!NextOppVar.Purchase_Order__c} Equals {!AddPOIfRequired}
+Result
+{!NextOppVar.Billing_Contact__c} = "0034G00002kZhu3QAC"
+{!NextOppVar.Amount} = "22,500"
+{!NextOppVar.Prevent_auto_renewal_split_invoice__c} = "true"
+{!NextOppVar.Purchase_Order__c} = "a0A25000006ESInEAO"
+{!NextOppVar.Contract_Start_Date__c} = "01 May 2023"
+{!NextOppVar.Delay_invoicing__c} = "true"
+{!NextOppVar.Name} = "Timing Test 13 quarter 3 of 4"
+{!NextOppVar.CloseDate} = "31 March 2023"
+{!NextOppVar.StageName} = "Ready to Invoice - Won"
+{!NextOppVar.Invoice_number__c} = "null"
+{!NextOppVar.Contract_End_Date__c} = "31 July 2023"
+{!NextOppVar.Opportunity_link__c} = "a0C2500000ExwPWEAZ"
+{!NextOppVar.Id} = "null"
+{!NextOppVar.Cost_of_Sale__c} = "0"
+{!NextOppVar.Number_of_Days__c} = "0"
+ASSIGNMENT: Update Opp Split Number
+{!OppSplitNumber} Equals {!OppSplitNumberPlus1}
+Result
+{!OppSplitNumber} = "3.00"
+DECISION: Round 1 Or 2
+Skipped this outcome because its conditions weren't met: Round_1
+Outcome conditions:
+{!RoundOfOpps} (2.00) Equals 1
+
+Default outcome executed.
+ASSIGNMENT: Update Opp Values for Renewal
+{!NextOppVar.Billing_Contact__c} Equals null
+{!NextOppVar.Delay_invoicing__c} Equals false
+{!NextOppVar.Freshdesk_Link__c} Equals https://helpdesk.xynomix.com/a/tickets/
+{!NextOppVar.Freshdesk_Ticket__c} Equals null
+{!NextOppVar.Purchase_Order__c} Equals null
+{!NextOppVar.MSS__c} Equals null
+{!NextOppVar.Name} Equals {!NewRenewalOppName}
+{!NextOppVar.StageName} Equals Renewal
+Result
+{!NextOppVar.Billing_Contact__c} = "null"
+{!NextOppVar.MSS__c} = "null"
+{!NextOppVar.StageName} = "Renewal"
+{!NextOppVar.Freshdesk_Link__c} = "https://helpdesk.xynomix.com/a/tickets/"
+{!NextOppVar.Purchase_Order__c} = "null"
+{!NextOppVar.Freshdesk_Ticket__c} = "null"
+{!NextOppVar.Delay_invoicing__c} = "false"
+{!NextOppVar.Name} = "Renewal - Timing Test 13 quarter 3 of 4"
+ASSIGNMENT: Assign New Opp To Collection
+{!NewOppsCollectionVar} Add {!NextOppVar}
+Result
+{!NewOppsCollectionVar} = "[Opportunity (No ID),Opportunity (No ID),Opportunity (No ID),Opportunity (No ID),Opportunity (No ID),Opportunity (No ID)]"
+DECISION: Have all opportunities been created?
+Outcome executed: Moreopportunitiesrequired
+Outcome conditions:
+{!OppSplitNumber} (3.00) Does not equal {!TotalNumberofSplits} (4.00)
+ASSIGNMENT: Assign Next Opp Values
+{!NextOppVar.Id} Equals null
+{!NextOppVar.Amount} Equals {!NewAmount}
+{!NextOppVar.Billing_Contact__c} Equals {!AddBillingContactIfRequired}
+{!NextOppVar.CloseDate} Equals {!NewOppEndDate}
+{!NextOppVar.Contract_End_Date__c} Equals {!NewOppContractEndDate}
+{!NextOppVar.Contract_Start_Date__c} Equals {!NewOppContractStartDate}
+{!NextOppVar.Cost_of_Sale__c} Equals {!NewCostOfSale}
+{!NextOppVar.Delay_invoicing__c} Equals true
+{!NextOppVar.Name} Equals {!NewOppName}
+{!NextOppVar.Number_of_Days__c} Equals {!NewNumberOfDays}
+{!NextOppVar.Opportunity_link__c} Equals {!Create_Split_billing_link_record}
+{!NextOppVar.Prevent_auto_renewal_split_invoice__c} Equals true
+{!NextOppVar.StageName} Equals {!Opportunity_Stage}
+{!NextOppVar.Invoice_number__c} Equals null
+{!NextOppVar.Purchase_Order__c} Equals {!AddPOIfRequired}
+Result
+{!NextOppVar.Billing_Contact__c} = "0034G00002kZhu3QAC"
+{!NextOppVar.Amount} = "22,500"
+{!NextOppVar.Prevent_auto_renewal_split_invoice__c} = "true"
+{!NextOppVar.Purchase_Order__c} = "a0A25000006ESInEAO"
+{!NextOppVar.Contract_Start_Date__c} = "01 August 2023"
+{!NextOppVar.Delay_invoicing__c} = "true"
+{!NextOppVar.Name} = "Timing Test 13 quarter 4 of 4"
+{!NextOppVar.CloseDate} = "30 June 2023"
+{!NextOppVar.StageName} = "Ready to Invoice - Won"
+{!NextOppVar.Invoice_number__c} = "null"
+{!NextOppVar.Contract_End_Date__c} = "31 October 2023"
+{!NextOppVar.Opportunity_link__c} = "a0C2500000ExwPWEAZ"
+{!NextOppVar.Id} = "null"
+{!NextOppVar.Cost_of_Sale__c} = "0"
+{!NextOppVar.Number_of_Days__c} = "0"
+ASSIGNMENT: Update Opp Split Number
+{!OppSplitNumber} Equals {!OppSplitNumberPlus1}
+Result
+{!OppSplitNumber} = "4.00"
+DECISION: Round 1 Or 2
+Skipped this outcome because its conditions weren't met: Round_1
+Outcome conditions:
+{!RoundOfOpps} (2.00) Equals 1
+
+Default outcome executed.
+ASSIGNMENT: Update Opp Values for Renewal
+{!NextOppVar.Billing_Contact__c} Equals null
+{!NextOppVar.Delay_invoicing__c} Equals false
+{!NextOppVar.Freshdesk_Link__c} Equals https://helpdesk.xynomix.com/a/tickets/
+{!NextOppVar.Freshdesk_Ticket__c} Equals null
+{!NextOppVar.Purchase_Order__c} Equals null
+{!NextOppVar.MSS__c} Equals null
+{!NextOppVar.Name} Equals {!NewRenewalOppName}
+{!NextOppVar.StageName} Equals Renewal
+Result
+{!NextOppVar.Billing_Contact__c} = "null"
+{!NextOppVar.MSS__c} = "null"
+{!NextOppVar.StageName} = "Renewal"
+{!NextOppVar.Freshdesk_Link__c} = "https://helpdesk.xynomix.com/a/tickets/"
+{!NextOppVar.Purchase_Order__c} = "null"
+{!NextOppVar.Freshdesk_Ticket__c} = "null"
+{!NextOppVar.Delay_invoicing__c} = "false"
+{!NextOppVar.Name} = "Renewal - Timing Test 13 quarter 4 of 4"
+ASSIGNMENT: Assign New Opp To Collection
+{!NewOppsCollectionVar} Add {!NextOppVar}
+Result
+{!NewOppsCollectionVar} = "[Opportunity (No ID),Opportunity (No ID),Opportunity (No ID),Opportunity (No ID),Opportunity (No ID),Opportunity (No ID),Opportunity (No ID)]"
+DECISION: Have all opportunities been created?
+Skipped this outcome because its conditions weren't met: Moreopportunitiesrequired
+Outcome conditions:
+{!OppSplitNumber} (4.00) Does not equal {!TotalNumberofSplits} (4.00)
+
+Default outcome executed.
+DECISION: Are Renewal Opps Required
+Skipped this outcome because its conditions weren't met: Renewal_Opps_Are_Required
+Outcome conditions:
+1. {!Opportunity_Stage} (Ready to Invoice - Won) Equals Ready to Invoice - Won
+2. {!Find_related_Opportunity.Opportunity_Type__c} (Support) Equals Support
+3. {!RoundOfOpps} (2.00) Equals 1
+Logic: All conditions must be true (AND)
+
+Default outcome executed.
+CREATE RECORDS: Create Opportunities
+Create Opportunity records using the values that are stored in {!NewOppsCollectionVar}.
+Variable Values
+[AccountId=0014G00002VInjFQAT,Additional_information_pre_sales__c=null,Allocated_SOW_days__c=0.0,Amount=22500.00,Anticipated_Pre_sales_time_hours__c=null,Bill_End_user_direct_channel_only__c=false,Billing_Address__c=<br><br><br><br>,Billing_Contact__c=0034G00002kZhu3QAC,Billing_Frequency_months__c=null,Billing_contact_telephone_number__c=03452229600,Billing_info_from_account__c=null,Budget_Confirmed__c=false,CampaignId=null,Channel_Direct__c=Direct,CloseDate=31/12/2021 00:00,Commit__c=false,Consultancy_Days_roll_up__c=0.0,Consultancy_Margin__c=0.0,Consultancy_Revenue__c=0.0,Consultancy__c=null,ContactId=null,Contact__c=0034G00002kZhu3QAC,ContractId=null,Contract_End_Date__c=30/04/2022 01:00,Contract_Start_Date__c=01/02/2022 00:00,Contract_length__c=null,Cost__c=null,Cost_details__c=hosting,Cost_of_Sale__c=0.00,Cost_roll_up__c=0.0,Create_SOW_against_pre_purchased_days__c=false,Create_credit_note_against_opportunity__c=false,CreatedById=0050N000007Jo6EQAS,CreatedDate=22/10/2021 13:21,Credit_check_workflow__c=false,Credit_note_ref_no__c=null,Credited_Opportunity__c=null,Current_customer_or_prospect__c=Current Customer,Date_Added__c=null,Date_for_2nd_Invoice__c=null,Day_rate_if_different_to_normal__c=null,Days_Called_Off__c=0.0,Delay_call_off_invoice__c=null,Delay_invoicing__c=true,Description=null,Description_of_call_off_days__c=null,Discovery_Completed__c=false,Expected_amount__c=0.0,Fiscal=2021 4,FiscalQuarter=4,FiscalYear=2021,ForecastCategory=Pipeline,ForecastCategoryName=Pipeline,Freshdesk_Link__c=https://helpdesk.xynomix.com/a/tickets/,Freshdesk_Ticket__c=null,Freshdesk_Ticket_credit__c=null,Freshdesk_ticket_for_SOW__c=null,Freshdesk_ticket_s_for_call_off_days__c=null,HasOpenActivity=false,HasOpportunityLineItem=true,HasOverdueTask=false,Hidden_Billing_Frequency_months__c=null,Hidden_first_invoice_date__c=null,Id=null,If_no_how_much_is_to_be_credited__c=null,If_so_what_s_the_value_of_the_refund__c=null,In_person_or_telephone_meeting__c=null,Include_Pre_sales_Request__c=null,Invoice_days_from_project__c=false,Invoice_number_Credit_notes__c=null,Invoice_number__c=null,IsClosed=false,IsDeleted=false,IsSplit=true,IsWon=false,Is_opportunity_being_credited_in_full__c=null,LastActivityDate=null,LastAmountChangedHistoryId=null,LastCloseDateChangedHistoryId=null,LastModifiedById=0050N000007Jo6EQAS,LastModifiedDate=22/10/2021 13:22,LastReferencedDate=02/11/2021 11:01,LastStageChangeDate=null,LastViewedDate=02/11/2021 11:01,Last_Activity_Date_2__c=null,Line_Item__c=a012500000JuTAsAAN,Link_to_PO__c=null,Link_to_pre_sales_Questionnaire__c=null,Loss_Reason__c=null,MSS__c=null,Margin__c=90000.0,Margin_calc__c=90000.0,Months_in_Contract__c=12.0,Name=Timing Test 13 quarter 2 of 4,New_ticket_required_SOW__c=false,New_ticket_required__c=false,NextStep=null,Number_of_Days__c=0.00,Number_of_days_to_call_off__c=null,OMM_Opp_ID__c=null,OMM_Payment_date__c=null,OMM_Rebate_amount__c=null,OMM_Received__c=false,Opportunity_Source__c=Cold Call,Opportunity_Type__c=Support,Opportunity_link__c=a0C2500000ExwPWEAZ,Oracle_Margin__c=0.0,Oracle_Revenue__c=0.0,Oracle__c=0.0,Oracle_pounds__c=0.0,Other_Margin__c=0.0,Other_Revenue__c=0.0,Other__c=0.0,Other_pounds__c=0.0,OwnerId=0050N000007Jo6EQAS,Partner_Account__c=null,Partner_Contact__c=null,Partner_Ticket_Number__c=null,Pre_purchased_days_or_SOW__c=null,Prevent_auto_renewal_split_invoice__c=true,Pricebook2Id=01s0N000003QkNWQA0,Probability=10.0,Product_Margin__c=0.0,Product_Revenue__c=0.0,Product__c=null,Purchase_Order__c=a0A25000006ESInEAO,PushCount=0,ROI_Analysis_Completed__c=false,Reason_for_Credit_Note__c=null,RecordTypeId=0120N000000Qzw7QAC,Remittance_Date__c=null,Renewal_Link__c=null,Renewal__c=false,SOW_Description__c=null,SOW_Name__c=null,SOW_from_pre_purch_workflow__c=false,SQL_Server_Margin__c=90000.0,SQL_Server_Revenue__c=90000.0,SQL_Server__c=100.0,SQL_Server_pounds__c=90000.0,Split_billing_Opportunity_name__c=null,Split_billing__c=false,Split_billing_countdown__c=null,StageName=Ready to Invoice - Won,Support_Margin__c=90000.0,Support_Revenue__c=90000.0,Support__c=null,SyncedQuoteId=null,SystemModstamp=22/10/2021 13:22,TOTAL_NUMBER_OF_PAYMENTS__c=null,Time_consultant_required_for_hours__c=null,Total_Pre_Sales_Allocation_hours__c=0.0,Type=Existing Business,Unallocated_SOW_days__c=0.0,Will_any_costs_be_refunded_to_xynomix__c=null,X18_Char_ID__c=0062500000RKRYNAA5]
+[AccountId=0014G00002VInjFQAT,Additional_information_pre_sales__c=null,Allocated_SOW_days__c=0.0,Amount=22500.00,Anticipated_Pre_sales_time_hours__c=null,Bill_End_user_direct_channel_only__c=false,Billing_Address__c=<br><br><br><br>,Billing_Contact__c=0034G00002kZhu3QAC,Billing_Frequency_months__c=null,Billing_contact_telephone_number__c=03452229600,Billing_info_from_account__c=null,Budget_Confirmed__c=false,CampaignId=null,Channel_Direct__c=Direct,CloseDate=31/03/2022 01:00,Commit__c=false,Consultancy_Days_roll_up__c=0.0,Consultancy_Margin__c=0.0,Consultancy_Revenue__c=0.0,Consultancy__c=null,ContactId=null,Contact__c=0034G00002kZhu3QAC,ContractId=null,Contract_End_Date__c=31/07/2022 01:00,Contract_Start_Date__c=01/05/2022 01:00,Contract_length__c=null,Cost__c=null,Cost_details__c=hosting,Cost_of_Sale__c=0.00,Cost_roll_up__c=0.0,Create_SOW_against_pre_purchased_days__c=false,Create_credit_note_against_opportunity__c=false,CreatedById=0050N000007Jo6EQAS,CreatedDate=22/10/2021 13:21,Credit_check_workflow__c=false,Credit_note_ref_no__c=null,Credited_Opportunity__c=null,Current_customer_or_prospect__c=Current Customer,Date_Added__c=null,Date_for_2nd_Invoice__c=null,Day_rate_if_different_to_normal__c=null,Days_Called_Off__c=0.0,Delay_call_off_invoice__c=null,Delay_invoicing__c=true,Description=null,Description_of_call_off_days__c=null,Discovery_Completed__c=false,Expected_amount__c=0.0,Fiscal=2021 4,FiscalQuarter=4,FiscalYear=2021,ForecastCategory=Pipeline,ForecastCategoryName=Pipeline,Freshdesk_Link__c=https://helpdesk.xynomix.com/a/tickets/,Freshdesk_Ticket__c=null,Freshdesk_Ticket_credit__c=null,Freshdesk_ticket_for_SOW__c=null,Freshdesk_ticket_s_for_call_off_days__c=null,HasOpenActivity=false,HasOpportunityLineItem=true,HasOverdueTask=false,Hidden_Billing_Frequency_months__c=null,Hidden_first_invoice_date__c=null,Id=null,If_no_how_much_is_to_be_credited__c=null,If_so_what_s_the_value_of_the_refund__c=null,In_person_or_telephone_meeting__c=null,Include_Pre_sales_Request__c=null,Invoice_days_from_project__c=false,Invoice_number_Credit_notes__c=null,Invoice_number__c=null,IsClosed=false,IsDeleted=false,IsSplit=true,IsWon=false,Is_opportunity_being_credited_in_full__c=null,LastActivityDate=null,LastAmountChangedHistoryId=null,LastCloseDateChangedHistoryId=null,LastModifiedById=0050N000007Jo6EQAS,LastModifiedDate=22/10/2021 13:22,LastReferencedDate=02/11/2021 11:01,LastStageChangeDate=null,LastViewedDate=02/11/2021 11:01,Last_Activity_Date_2__c=null,Line_Item__c=a012500000JuTAsAAN,Link_to_PO__c=null,Link_to_pre_sales_Questionnaire__c=null,Loss_Reason__c=null,MSS__c=null,Margin__c=90000.0,Margin_calc__c=90000.0,Months_in_Contract__c=12.0,Name=Timing Test 13 quarter 3 of 4,New_ticket_required_SOW__c=false,New_ticket_required__c=false,NextStep=null,Number_of_Days__c=0.00,Number_of_days_to_call_off__c=null,OMM_Opp_ID__c=null,OMM_Payment_date__c=null,OMM_Rebate_amount__c=null,OMM_Received__c=false,Opportunity_Source__c=Cold Call,Opportunity_Type__c=Support,Opportunity_link__c=a0C2500000ExwPWEAZ,Oracle_Margin__c=0.0,Oracle_Revenue__c=0.0,Oracle__c=0.0,Oracle_pounds__c=0.0,Other_Margin__c=0.0,Other_Revenue__c=0.0,Other__c=0.0,Other_pounds__c=0.0,OwnerId=0050N000007Jo6EQAS,Partner_Account__c=null,Partner_Contact__c=null,Partner_Ticket_Number__c=null,Pre_purchased_days_or_SOW__c=null,Prevent_auto_renewal_split_invoice__c=true,Pricebook2Id=01s0N000003QkNWQA0,Probability=10.0,Product_Margin__c=0.0,Product_Revenue__c=0.0,Product__c=null,Purchase_Order__c=a0A25000006ESInEAO,PushCount=0,ROI_Analysis_Completed__c=false,Reason_for_Credit_Note__c=null,RecordTypeId=0120N000000Qzw7QAC,Remittance_Date__c=null,Renewal_Link__c=null,Renewal__c=false,SOW_Description__c=null,SOW_Name__c=null,SOW_from_pre_purch_workflow__c=false,SQL_Server_Margin__c=90000.0,SQL_Server_Revenue__c=90000.0,SQL_Server__c=100.0,SQL_Server_pounds__c=90000.0,Split_billing_Opportunity_name__c=null,Split_billing__c=false,Split_billing_countdown__c=null,StageName=Ready to Invoice - Won,Support_Margin__c=90000.0,Support_Revenue__c=90000.0,Support__c=null,SyncedQuoteId=null,SystemModstamp=22/10/2021 13:22,TOTAL_NUMBER_OF_PAYMENTS__c=null,Time_consultant_required_for_hours__c=null,Total_Pre_Sales_Allocation_hours__c=0.0,Type=Existing Business,Unallocated_SOW_days__c=0.0,Will_any_costs_be_refunded_to_xynomix__c=null,X18_Char_ID__c=0062500000RKRYNAA5]
+[AccountId=0014G00002VInjFQAT,Additional_information_pre_sales__c=null,Allocated_SOW_days__c=0.0,Amount=22500.00,Anticipated_Pre_sales_time_hours__c=null,Bill_End_user_direct_channel_only__c=false,Billing_Address__c=<br><br><br><br>,Billing_Contact__c=0034G00002kZhu3QAC,Billing_Frequency_months__c=null,Billing_contact_telephone_number__c=03452229600,Billing_info_from_account__c=null,Budget_Confirmed__c=false,CampaignId=null,Channel_Direct__c=Direct,CloseDate=30/06/2022 01:00,Commit__c=false,Consultancy_Days_roll_up__c=0.0,Consultancy_Margin__c=0.0,Consultancy_Revenue__c=0.0,Consultancy__c=null,ContactId=null,Contact__c=0034G00002kZhu3QAC,ContractId=null,Contract_End_Date__c=31/10/2022 00:00,Contract_Start_Date__c=01/08/2022 01:00,Contract_length__c=null,Cost__c=null,Cost_details__c=hosting,Cost_of_Sale__c=0.00,Cost_roll_up__c=0.0,Create_SOW_against_pre_purchased_days__c=false,Create_credit_note_against_opportunity__c=false,CreatedById=0050N000007Jo6EQAS,CreatedDate=22/10/2021 13:21,Credit_check_workflow__c=false,Credit_note_ref_no__c=null,Credited_Opportunity__c=null,Current_customer_or_prospect__c=Current Customer,Date_Added__c=null,Date_for_2nd_Invoice__c=null,Day_rate_if_different_to_normal__c=null,Days_Called_Off__c=0.0,Delay_call_off_invoice__c=null,Delay_invoicing__c=true,Description=null,Description_of_call_off_days__c=null,Discovery_Completed__c=false,Expected_amount__c=0.0,Fiscal=2021 4,FiscalQuarter=4,FiscalYear=2021,ForecastCategory=Pipeline,ForecastCategoryName=Pipeline,Freshdesk_Link__c=https://helpdesk.xynomix.com/a/tickets/,Freshdesk_Ticket__c=null,Freshdesk_Ticket_credit__c=null,Freshdesk_ticket_for_SOW__c=null,Freshdesk_ticket_s_for_call_off_days__c=null,HasOpenActivity=false,HasOpportunityLineItem=true,HasOverdueTask=false,Hidden_Billing_Frequency_months__c=null,Hidden_first_invoice_date__c=null,Id=null,If_no_how_much_is_to_be_credited__c=null,If_so_what_s_the_value_of_the_refund__c=null,In_person_or_telephone_meeting__c=null,Include_Pre_sales_Request__c=null,Invoice_days_from_project__c=false,Invoice_number_Credit_notes__c=null,Invoice_number__c=null,IsClosed=false,IsDeleted=false,IsSplit=true,IsWon=false,Is_opportunity_being_credited_in_full__c=null,LastActivityDate=null,LastAmountChangedHistoryId=null,LastCloseDateChangedHistoryId=null,LastModifiedById=0050N000007Jo6EQAS,LastModifiedDate=22/10/2021 13:22,LastReferencedDate=02/11/2021 11:01,LastStageChangeDate=null,LastViewedDate=02/11/2021 11:01,Last_Activity_Date_2__c=null,Line_Item__c=a012500000JuTAsAAN,Link_to_PO__c=null,Link_to_pre_sales_Questionnaire__c=null,Loss_Reason__c=null,MSS__c=null,Margin__c=90000.0,Margin_calc__c=90000.0,Months_in_Contract__c=12.0,Name=Timing Test 13 quarter 4 of 4,New_ticket_required_SOW__c=false,New_ticket_required__c=false,NextStep=null,Number_of_Days__c=0.00,Number_of_days_to_call_off__c=null,OMM_Opp_ID__c=null,OMM_Payment_date__c=null,OMM_Rebate_amount__c=null,OMM_Received__c=false,Opportunity_Source__c=Cold Call,Opportunity_Type__c=Support,Opportunity_link__c=a0C2500000ExwPWEAZ,Oracle_Margin__c=0.0,Oracle_Revenue__c=0.0,Oracle__c=0.0,Oracle_pounds__c=0.0,Other_Margin__c=0.0,Other_Revenue__c=0.0,Other__c=0.0,Other_pounds__c=0.0,OwnerId=0050N000007Jo6EQAS,Partner_Account__c=null,Partner_Contact__c=null,Partner_Ticket_Number__c=null,Pre_purchased_days_or_SOW__c=null,Prevent_auto_renewal_split_invoice__c=true,Pricebook2Id=01s0N000003QkNWQA0,Probability=10.0,Product_Margin__c=0.0,Product_Revenue__c=0.0,Product__c=null,Purchase_Order__c=a0A25000006ESInEAO,PushCount=0,ROI_Analysis_Completed__c=false,Reason_for_Credit_Note__c=null,RecordTypeId=0120N000000Qzw7QAC,Remittance_Date__c=null,Renewal_Link__c=null,Renewal__c=false,SOW_Description__c=null,SOW_Name__c=null,SOW_from_pre_purch_workflow__c=false,SQL_Server_Margin__c=90000.0,SQL_Server_Revenue__c=90000.0,SQL_Server__c=100.0,SQL_Server_pounds__c=90000.0,Split_billing_Opportunity_name__c=null,Split_billing__c=false,Split_billing_countdown__c=null,StageName=Ready to Invoice - Won,Support_Margin__c=90000.0,Support_Revenue__c=90000.0,Support__c=null,SyncedQuoteId=null,SystemModstamp=22/10/2021 13:22,TOTAL_NUMBER_OF_PAYMENTS__c=null,Time_consultant_required_for_hours__c=null,Total_Pre_Sales_Allocation_hours__c=0.0,Type=Existing Business,Unallocated_SOW_days__c=0.0,Will_any_costs_be_refunded_to_xynomix__c=null,X18_Char_ID__c=0062500000RKRYNAA5]
+[AccountId=0014G00002VInjFQAT,Additional_information_pre_sales__c=null,Allocated_SOW_days__c=0.0,Amount=22500.00,Anticipated_Pre_sales_time_hours__c=null,Bill_End_user_direct_channel_only__c=false,Billing_Address__c=<br><br><br><br>,Billing_Contact__c=null,Billing_Frequency_months__c=null,Billing_contact_telephone_number__c=03452229600,Billing_info_from_account__c=null,Budget_Confirmed__c=false,CampaignId=null,Channel_Direct__c=Direct,CloseDate=30/09/2022 01:00,Commit__c=false,Consultancy_Days_roll_up__c=0.0,Consultancy_Margin__c=0.0,Consultancy_Revenue__c=0.0,Consultancy__c=null,ContactId=null,Contact__c=0034G00002kZhu3QAC,ContractId=null,Contract_End_Date__c=31/01/2023 00:00,Contract_Start_Date__c=01/11/2022 00:00,Contract_length__c=null,Cost__c=null,Cost_details__c=hosting,Cost_of_Sale__c=0.00,Cost_roll_up__c=0.0,Create_SOW_against_pre_purchased_days__c=false,Create_credit_note_against_opportunity__c=false,CreatedById=0050N000007Jo6EQAS,CreatedDate=22/10/2021 13:21,Credit_check_workflow__c=false,Credit_note_ref_no__c=null,Credited_Opportunity__c=null,Current_customer_or_prospect__c=Current Customer,Date_Added__c=null,Date_for_2nd_Invoice__c=null,Day_rate_if_different_to_normal__c=null,Days_Called_Off__c=0.0,Delay_call_off_invoice__c=null,Delay_invoicing__c=false,Description=null,Description_of_call_off_days__c=null,Discovery_Completed__c=false,Expected_amount__c=0.0,Fiscal=2021 4,FiscalQuarter=4,FiscalYear=2021,ForecastCategory=Pipeline,ForecastCategoryName=Pipeline,Freshdesk_Link__c=https://helpdesk.xynomix.com/a/tickets/,Freshdesk_Ticket__c=null,Freshdesk_Ticket_credit__c=null,Freshdesk_ticket_for_SOW__c=null,Freshdesk_ticket_s_for_call_off_days__c=null,HasOpenActivity=false,HasOpportunityLineItem=true,HasOverdueTask=false,Hidden_Billing_Frequency_months__c=null,Hidden_first_invoice_date__c=null,Id=null,If_no_how_much_is_to_be_credited__c=null,If_so_what_s_the_value_of_the_refund__c=null,In_person_or_telephone_meeting__c=null,Include_Pre_sales_Request__c=null,Invoice_days_from_project__c=false,Invoice_number_Credit_notes__c=null,Invoice_number__c=null,IsClosed=false,IsDeleted=false,IsSplit=true,IsWon=false,Is_opportunity_being_credited_in_full__c=null,LastActivityDate=null,LastAmountChangedHistoryId=null,LastCloseDateChangedHistoryId=null,LastModifiedById=0050N000007Jo6EQAS,LastModifiedDate=22/10/2021 13:22,LastReferencedDate=02/11/2021 11:01,LastStageChangeDate=null,LastViewedDate=02/11/2021 11:01,Last_Activity_Date_2__c=null,Line_Item__c=a012500000JuTAsAAN,Link_to_PO__c=null,Link_to_pre_sales_Questionnaire__c=null,Loss_Reason__c=null,MSS__c=null,Margin__c=90000.0,Margin_calc__c=90000.0,Months_in_Contract__c=12.0,Name=Renewal - Timing Test 13 quarter 1 of 4,New_ticket_required_SOW__c=false,New_ticket_required__c=false,NextStep=null,Number_of_Days__c=0.00,Number_of_days_to_call_off__c=null,OMM_Opp_ID__c=null,OMM_Payment_date__c=null,OMM_Rebate_amount__c=null,OMM_Received__c=false,Opportunity_Source__c=Cold Call,Opportunity_Type__c=Support,Opportunity_link__c=a0C2500000ExwPWEAZ,Oracle_Margin__c=0.0,Oracle_Revenue__c=0.0,Oracle__c=0.0,Oracle_pounds__c=0.0,Other_Margin__c=0.0,Other_Revenue__c=0.0,Other__c=0.0,Other_pounds__c=0.0,OwnerId=0050N000007Jo6EQAS,Partner_Account__c=null,Partner_Contact__c=null,Partner_Ticket_Number__c=null,Pre_purchased_days_or_SOW__c=null,Prevent_auto_renewal_split_invoice__c=true,Pricebook2Id=01s0N000003QkNWQA0,Probability=10.0,Product_Margin__c=0.0,Product_Revenue__c=0.0,Product__c=null,Purchase_Order__c=null,PushCount=0,ROI_Analysis_Completed__c=false,Reason_for_Credit_Note__c=null,RecordTypeId=0120N000000Qzw7QAC,Remittance_Date__c=null,Renewal_Link__c=null,Renewal__c=false,SOW_Description__c=null,SOW_Name__c=null,SOW_from_pre_purch_workflow__c=false,SQL_Server_Margin__c=90000.0,SQL_Server_Revenue__c=90000.0,SQL_Server__c=100.0,SQL_Server_pounds__c=90000.0,Split_billing_Opportunity_name__c=null,Split_billing__c=false,Split_billing_countdown__c=null,StageName=Renewal,Support_Margin__c=90000.0,Support_Revenue__c=90000.0,Support__c=null,SyncedQuoteId=null,SystemModstamp=22/10/2021 13:22,TOTAL_NUMBER_OF_PAYMENTS__c=null,Time_consultant_required_for_hours__c=null,Total_Pre_Sales_Allocation_hours__c=0.0,Type=Existing Business,Unallocated_SOW_days__c=0.0,Will_any_costs_be_refunded_to_xynomix__c=null,X18_Char_ID__c=0062500000RKRYNAA5]
+[AccountId=0014G00002VInjFQAT,Additional_information_pre_sales__c=null,Allocated_SOW_days__c=0.0,Amount=22500.00,Anticipated_Pre_sales_time_hours__c=null,Bill_End_user_direct_channel_only__c=false,Billing_Address__c=<br><br><br><br>,Billing_Contact__c=null,Billing_Frequency_months__c=null,Billing_contact_telephone_number__c=03452229600,Billing_info_from_account__c=null,Budget_Confirmed__c=false,CampaignId=null,Channel_Direct__c=Direct,CloseDate=31/12/2022 00:00,Commit__c=false,Consultancy_Days_roll_up__c=0.0,Consultancy_Margin__c=0.0,Consultancy_Revenue__c=0.0,Consultancy__c=null,ContactId=null,Contact__c=0034G00002kZhu3QAC,ContractId=null,Contract_End_Date__c=30/04/2023 01:00,Contract_Start_Date__c=01/02/2023 00:00,Contract_length__c=null,Cost__c=null,Cost_details__c=hosting,Cost_of_Sale__c=0.00,Cost_roll_up__c=0.0,Create_SOW_against_pre_purchased_days__c=false,Create_credit_note_against_opportunity__c=false,CreatedById=0050N000007Jo6EQAS,CreatedDate=22/10/2021 13:21,Credit_check_workflow__c=false,Credit_note_ref_no__c=null,Credited_Opportunity__c=null,Current_customer_or_prospect__c=Current Customer,Date_Added__c=null,Date_for_2nd_Invoice__c=null,Day_rate_if_different_to_normal__c=null,Days_Called_Off__c=0.0,Delay_call_off_invoice__c=null,Delay_invoicing__c=false,Description=null,Description_of_call_off_days__c=null,Discovery_Completed__c=false,Expected_amount__c=0.0,Fiscal=2021 4,FiscalQuarter=4,FiscalYear=2021,ForecastCategory=Pipeline,ForecastCategoryName=Pipeline,Freshdesk_Link__c=https://helpdesk.xynomix.com/a/tickets/,Freshdesk_Ticket__c=null,Freshdesk_Ticket_credit__c=null,Freshdesk_ticket_for_SOW__c=null,Freshdesk_ticket_s_for_call_off_days__c=null,HasOpenActivity=false,HasOpportunityLineItem=true,HasOverdueTask=false,Hidden_Billing_Frequency_months__c=null,Hidden_first_invoice_date__c=null,Id=null,If_no_how_much_is_to_be_credited__c=null,If_so_what_s_the_value_of_the_refund__c=null,In_person_or_telephone_meeting__c=null,Include_Pre_sales_Request__c=null,Invoice_days_from_project__c=false,Invoice_number_Credit_notes__c=null,Invoice_number__c=null,IsClosed=false,IsDeleted=false,IsSplit=true,IsWon=false,Is_opportunity_being_credited_in_full__c=null,LastActivityDate=null,LastAmountChangedHistoryId=null,LastCloseDateChangedHistoryId=null,LastModifiedById=0050N000007Jo6EQAS,LastModifiedDate=22/10/2021 13:22,LastReferencedDate=02/11/2021 11:01,LastStageChangeDate=null,LastViewedDate=02/11/2021 11:01,Last_Activity_Date_2__c=null,Line_Item__c=a012500000JuTAsAAN,Link_to_PO__c=null,Link_to_pre_sales_Questionnaire__c=null,Loss_Reason__c=null,MSS__c=null,Margin__c=90000.0,Margin_calc__c=90000.0,Months_in_Contract__c=12.0,Name=Renewal - Timing Test 13 quarter 2 of 4,New_ticket_required_SOW__c=false,New_ticket_required__c=false,NextStep=null,Number_of_Days__c=0.00,Number_of_days_to_call_off__c=null,OMM_Opp_ID__c=null,OMM_Payment_date__c=null,OMM_Rebate_amount__c=null,OMM_Received__c=false,Opportunity_Source__c=Cold Call,Opportunity_Type__c=Support,Opportunity_link__c=a0C2500000ExwPWEAZ,Oracle_Margin__c=0.0,Oracle_Revenue__c=0.0,Oracle__c=0.0,Oracle_pounds__c=0.0,Other_Margin__c=0.0,Other_Revenue__c=0.0,Other__c=0.0,Other_pounds__c=0.0,OwnerId=0050N000007Jo6EQAS,Partner_Account__c=null,Partner_Contact__c=null,Partner_Ticket_Number__c=null,Pre_purchased_days_or_SOW__c=null,Prevent_auto_renewal_split_invoice__c=true,Pricebook2Id=01s0N000003QkNWQA0,Probability=10.0,Product_Margin__c=0.0,Product_Revenue__c=0.0,Product__c=null,Purchase_Order__c=null,PushCount=0,ROI_Analysis_Completed__c=false,Reason_for_Credit_Note__c=null,RecordTypeId=0120N000000Qzw7QAC,Remittance_Date__c=null,Renewal_Link__c=null,Renewal__c=false,SOW_Description__c=null,SOW_Name__c=null,SOW_from_pre_purch_workflow__c=false,SQL_Server_Margin__c=90000.0,SQL_Server_Revenue__c=90000.0,SQL_Server__c=100.0,SQL_Server_pounds__c=90000.0,Split_billing_Opportunity_name__c=null,Split_billing__c=false,Split_billing_countdown__c=null,StageName=Renewal,Support_Margin__c=90000.0,Support_Revenue__c=90000.0,Support__c=null,SyncedQuoteId=null,SystemModstamp=22/10/2021 13:22,TOTAL_NUMBER_OF_PAYMENTS__c=null,Time_consultant_required_for_hours__c=null,Total_Pre_Sales_Allocation_hours__c=0.0,Type=Existing Business,Unallocated_SOW_days__c=0.0,Will_any_costs_be_refunded_to_xynomix__c=null,X18_Char_ID__c=0062500000RKRYNAA5]
+[AccountId=0014G00002VInjFQAT,Additional_information_pre_sales__c=null,Allocated_SOW_days__c=0.0,Amount=22500.00,Anticipated_Pre_sales_time_hours__c=null,Bill_End_user_direct_channel_only__c=false,Billing_Address__c=<br><br><br><br>,Billing_Contact__c=null,Billing_Frequency_months__c=null,Billing_contact_telephone_number__c=03452229600,Billing_info_from_account__c=null,Budget_Confirmed__c=false,CampaignId=null,Channel_Direct__c=Direct,CloseDate=31/03/2023 01:00,Commit__c=false,Consultancy_Days_roll_up__c=0.0,Consultancy_Margin__c=0.0,Consultancy_Revenue__c=0.0,Consultancy__c=null,ContactId=null,Contact__c=0034G00002kZhu3QAC,ContractId=null,Contract_End_Date__c=31/07/2023 01:00,Contract_Start_Date__c=01/05/2023 01:00,Contract_length__c=null,Cost__c=null,Cost_details__c=hosting,Cost_of_Sale__c=0.00,Cost_roll_up__c=0.0,Create_SOW_against_pre_purchased_days__c=false,Create_credit_note_against_opportunity__c=false,CreatedById=0050N000007Jo6EQAS,CreatedDate=22/10/2021 13:21,Credit_check_workflow__c=false,Credit_note_ref_no__c=null,Credited_Opportunity__c=null,Current_customer_or_prospect__c=Current Customer,Date_Added__c=null,Date_for_2nd_Invoice__c=null,Day_rate_if_different_to_normal__c=null,Days_Called_Off__c=0.0,Delay_call_off_invoice__c=null,Delay_invoicing__c=false,Description=null,Description_of_call_off_days__c=null,Discovery_Completed__c=false,Expected_amount__c=0.0,Fiscal=2021 4,FiscalQuarter=4,FiscalYear=2021,ForecastCategory=Pipeline,ForecastCategoryName=Pipeline,Freshdesk_Link__c=https://helpdesk.xynomix.com/a/tickets/,Freshdesk_Ticket__c=null,Freshdesk_Ticket_credit__c=null,Freshdesk_ticket_for_SOW__c=null,Freshdesk_ticket_s_for_call_off_days__c=null,HasOpenActivity=false,HasOpportunityLineItem=true,HasOverdueTask=false,Hidden_Billing_Frequency_months__c=null,Hidden_first_invoice_date__c=null,Id=null,If_no_how_much_is_to_be_credited__c=null,If_so_what_s_the_value_of_the_refund__c=null,In_person_or_telephone_meeting__c=null,Include_Pre_sales_Request__c=null,Invoice_days_from_project__c=false,Invoice_number_Credit_notes__c=null,Invoice_number__c=null,IsClosed=false,IsDeleted=false,IsSplit=true,IsWon=false,Is_opportunity_being_credited_in_full__c=null,LastActivityDate=null,LastAmountChangedHistoryId=null,LastCloseDateChangedHistoryId=null,LastModifiedById=0050N000007Jo6EQAS,LastModifiedDate=22/10/2021 13:22,LastReferencedDate=02/11/2021 11:01,LastStageChangeDate=null,LastViewedDate=02/11/2021 11:01,Last_Activity_Date_2__c=null,Line_Item__c=a012500000JuTAsAAN,Link_to_PO__c=null,Link_to_pre_sales_Questionnaire__c=null,Loss_Reason__c=null,MSS__c=null,Margin__c=90000.0,Margin_calc__c=90000.0,Months_in_Contract__c=12.0,Name=Renewal - Timing Test 13 quarter 3 of 4,New_ticket_required_SOW__c=false,New_ticket_required__c=false,NextStep=null,Number_of_Days__c=0.00,Number_of_days_to_call_off__c=null,OMM_Opp_ID__c=null,OMM_Payment_date__c=null,OMM_Rebate_amount__c=null,OMM_Received__c=false,Opportunity_Source__c=Cold Call,Opportunity_Type__c=Support,Opportunity_link__c=a0C2500000ExwPWEAZ,Oracle_Margin__c=0.0,Oracle_Revenue__c=0.0,Oracle__c=0.0,Oracle_pounds__c=0.0,Other_Margin__c=0.0,Other_Revenue__c=0.0,Other__c=0.0,Other_pounds__c=0.0,OwnerId=0050N000007Jo6EQAS,Partner_Account__c=null,Partner_Contact__c=null,Partner_Ticket_Number__c=null,Pre_purchased_days_or_SOW__c=null,Prevent_auto_renewal_split_invoice__c=true,Pricebook2Id=01s0N000003QkNWQA0,Probability=10.0,Product_Margin__c=0.0,Product_Revenue__c=0.0,Product__c=null,Purchase_Order__c=null,PushCount=0,ROI_Analysis_Completed__c=false,Reason_for_Credit_Note__c=null,RecordTypeId=0120N000000Qzw7QAC,Remittance_Date__c=null,Renewal_Link__c=null,Renewal__c=false,SOW_Description__c=null,SOW_Name__c=null,SOW_from_pre_purch_workflow__c=false,SQL_Server_Margin__c=90000.0,SQL_Server_Revenue__c=90000.0,SQL_Server__c=100.0,SQL_Server_pounds__c=90000.0,Split_billing_Opportunity_name__c=null,Split_billing__c=false,Split_billing_countdown__c=null,StageName=Renewal,Support_Margin__c=90000.0,Support_Revenue__c=90000.0,Support__c=null,SyncedQuoteId=null,SystemModstamp=22/10/2021 13:22,TOTAL_NUMBER_OF_PAYMENTS__c=null,Time_consultant_required_for_hours__c=null,Total_Pre_Sales_Allocation_hours__c=0.0,Type=Existing Business,Unallocated_SOW_days__c=0.0,Will_any_costs_be_refunded_to_xynomix__c=null,X18_Char_ID__c=0062500000RKRYNAA5]
+[AccountId=0014G00002VInjFQAT,Additional_information_pre_sales__c=null,Allocated_SOW_days__c=0.0,Amount=22500.00,Anticipated_Pre_sales_time_hours__c=null,Bill_End_user_direct_channel_only__c=false,Billing_Address__c=<br><br><br><br>,Billing_Contact__c=null,Billing_Frequency_months__c=null,Billing_contact_telephone_number__c=03452229600,Billing_info_from_account__c=null,Budget_Confirmed__c=false,CampaignId=null,Channel_Direct__c=Direct,CloseDate=30/06/2023 01:00,Commit__c=false,Consultancy_Days_roll_up__c=0.0,Consultancy_Margin__c=0.0,Consultancy_Revenue__c=0.0,Consultancy__c=null,ContactId=null,Contact__c=0034G00002kZhu3QAC,ContractId=null,Contract_End_Date__c=31/10/2023 00:00,Contract_Start_Date__c=01/08/2023 01:00,Contract_length__c=null,Cost__c=null,Cost_details__c=hosting,Cost_of_Sale__c=0.00,Cost_roll_up__c=0.0,Create_SOW_against_pre_purchased_days__c=false,Create_credit_note_against_opportunity__c=false,CreatedById=0050N000007Jo6EQAS,CreatedDate=22/10/2021 13:21,Credit_check_workflow__c=false,Credit_note_ref_no__c=null,Credited_Opportunity__c=null,Current_customer_or_prospect__c=Current Customer,Date_Added__c=null,Date_for_2nd_Invoice__c=null,Day_rate_if_different_to_normal__c=null,Days_Called_Off__c=0.0,Delay_call_off_invoice__c=null,Delay_invoicing__c=false,Description=null,Description_of_call_off_days__c=null,Discovery_Completed__c=false,Expected_amount__c=0.0,Fiscal=2021 4,FiscalQuarter=4,FiscalYear=2021,ForecastCategory=Pipeline,ForecastCategoryName=Pipeline,Freshdesk_Link__c=https://helpdesk.xynomix.com/a/tickets/,Freshdesk_Ticket__c=null,Freshdesk_Ticket_credit__c=null,Freshdesk_ticket_for_SOW__c=null,Freshdesk_ticket_s_for_call_off_days__c=null,HasOpenActivity=false,HasOpportunityLineItem=true,HasOverdueTask=false,Hidden_Billing_Frequency_months__c=null,Hidden_first_invoice_date__c=null,Id=null,If_no_how_much_is_to_be_credited__c=null,If_so_what_s_the_value_of_the_refund__c=null,In_person_or_telephone_meeting__c=null,Include_Pre_sales_Request__c=null,Invoice_days_from_project__c=false,Invoice_number_Credit_notes__c=null,Invoice_number__c=null,IsClosed=false,IsDeleted=false,IsSplit=true,IsWon=false,Is_opportunity_being_credited_in_full__c=null,LastActivityDate=null,LastAmountChangedHistoryId=null,LastCloseDateChangedHistoryId=null,LastModifiedById=0050N000007Jo6EQAS,LastModifiedDate=22/10/2021 13:22,LastReferencedDate=02/11/2021 11:01,LastStageChangeDate=null,LastViewedDate=02/11/2021 11:01,Last_Activity_Date_2__c=null,Line_Item__c=a012500000JuTAsAAN,Link_to_PO__c=null,Link_to_pre_sales_Questionnaire__c=null,Loss_Reason__c=null,MSS__c=null,Margin__c=90000.0,Margin_calc__c=90000.0,Months_in_Contract__c=12.0,Name=Renewal - Timing Test 13 quarter 4 of 4,New_ticket_required_SOW__c=false,New_ticket_required__c=false,NextStep=null,Number_of_Days__c=0.00,Number_of_days_to_call_off__c=null,OMM_Opp_ID__c=null,OMM_Payment_date__c=null,OMM_Rebate_amount__c=null,OMM_Received__c=false,Opportunity_Source__c=Cold Call,Opportunity_Type__c=Support,Opportunity_link__c=a0C2500000ExwPWEAZ,Oracle_Margin__c=0.0,Oracle_Revenue__c=0.0,Oracle__c=0.0,Oracle_pounds__c=0.0,Other_Margin__c=0.0,Other_Revenue__c=0.0,Other__c=0.0,Other_pounds__c=0.0,OwnerId=0050N000007Jo6EQAS,Partner_Account__c=null,Partner_Contact__c=null,Partner_Ticket_Number__c=null,Pre_purchased_days_or_SOW__c=null,Prevent_auto_renewal_split_invoice__c=true,Pricebook2Id=01s0N000003QkNWQA0,Probability=10.0,Product_Margin__c=0.0,Product_Revenue__c=0.0,Product__c=null,Purchase_Order__c=null,PushCount=0,ROI_Analysis_Completed__c=false,Reason_for_Credit_Note__c=null,RecordTypeId=0120N000000Qzw7QAC,Remittance_Date__c=null,Renewal_Link__c=null,Renewal__c=false,SOW_Description__c=null,SOW_Name__c=null,SOW_from_pre_purch_workflow__c=false,SQL_Server_Margin__c=90000.0,SQL_Server_Revenue__c=90000.0,SQL_Server__c=100.0,SQL_Server_pounds__c=90000.0,Split_billing_Opportunity_name__c=null,Split_billing__c=false,Split_billing_countdown__c=null,StageName=Renewal,Support_Margin__c=90000.0,Support_Revenue__c=90000.0,Support__c=null,SyncedQuoteId=null,SystemModstamp=22/10/2021 13:22,TOTAL_NUMBER_OF_PAYMENTS__c=null,Time_consultant_required_for_hours__c=null,Total_Pre_Sales_Allocation_hours__c=0.0,Type=Existing Business,Unallocated_SOW_days__c=0.0,Will_any_costs_be_refunded_to_xynomix__c=null,X18_Char_ID__c=0062500000RKRYNAA5]
+Result
+All records are ready to be created when the next screen, pause, or local action is executed or when the interview finishes.
+GET RECORDS: Find all new opps
+Find all Opportunity records where:
+Id Does not equal {!Find_related_Opportunity.Id} (0062500000RKRYNAA5)
+AND Opportunity_link__c Equals {!Create_Split_billing_link_record} (a0C2500000ExwPWEAZ)
+Store the values of these fields in Find_all_new_opps: Id
+Result
+Successfully found records.
+LOOP: All New Opps Loop
+Loop Through: [0062500000RtaqfAAB,0062500000RtaqgAAB,0062500000RtaqhAAB,0062500000RtaqiAAB,0062500000RtaqjAAB,0062500000RtaqkAAB,0062500000RtaqlAAB]
+Iteration: 0
+Current iteration item: 0062500000RtaqfAAB
+LOOP: Add Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 0
+Current iteration item: 00k25000007SJNrAAO
+ASSIGNMENT: Assign New Product Values
+{!NewProductValuesVar.Description} Equals {!Add_Products.Description}
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} Equals {!Add_Products.Item_Cost_to_Xynomix__c}
+{!NewProductValuesVar.Name} Equals {!Add_Products.Name}
+{!NewProductValuesVar.OpportunityId} Equals {!All_New_Opps_Loop.Id}
+{!NewProductValuesVar.PricebookEntryId} Equals {!Add_Products.PricebookEntryId}
+{!NewProductValuesVar.Product2Id} Equals {!Add_Products.Product2Id}
+{!NewProductValuesVar.ProductCode} Equals {!Add_Products.ProductCode}
+{!NewProductValuesVar.Quantity} Equals {!UpdateQuantityNewOpps}
+{!NewProductValuesVar.ServiceDate} Equals {!Add_Products.ServiceDate}
+{!NewProductValuesVar.SortOrder} Equals {!Add_Products.SortOrder}
+{!NewProductValuesVar.TotalPrice} Equals {!UpdatedTotalPriceNewOpps}
+{!NewProductValuesVar.UnitPrice} Equals null
+Result
+{!NewProductValuesVar.Product2Id} = "01t25000006kmTZAAY"
+{!NewProductValuesVar.TotalPrice} = "15,750"
+{!NewProductValuesVar.Quantity} = "1.75"
+{!NewProductValuesVar.Description} = "null"
+{!NewProductValuesVar.Name} = "Timing Test 13 Microsoft SQL Server 24x7x365 (Per instance)"
+{!NewProductValuesVar.PricebookEntryId} = "01u25000009JCWrAAO"
+{!NewProductValuesVar.ProductCode} = "SQL_247_MON"
+{!NewProductValuesVar.SortOrder} = "null"
+{!NewProductValuesVar.OpportunityId} = "0062500000RtaqfAAB"
+{!NewProductValuesVar.UnitPrice} = "null"
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} = "null"
+{!NewProductValuesVar.ServiceDate} = "null"
+ASSIGNMENT: Assign New Products Collection
+{!NewOppProductsCollectionVar} Add {!NewProductValuesVar}
+Result
+{!NewOppProductsCollectionVar} = "[OpportunityLineItem (No ID)]"
+LOOP: Add Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 1
+Current iteration item: 00k25000007SJNsAAO
+ASSIGNMENT: Assign New Product Values
+{!NewProductValuesVar.Description} Equals {!Add_Products.Description}
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} Equals {!Add_Products.Item_Cost_to_Xynomix__c}
+{!NewProductValuesVar.Name} Equals {!Add_Products.Name}
+{!NewProductValuesVar.OpportunityId} Equals {!All_New_Opps_Loop.Id}
+{!NewProductValuesVar.PricebookEntryId} Equals {!Add_Products.PricebookEntryId}
+{!NewProductValuesVar.Product2Id} Equals {!Add_Products.Product2Id}
+{!NewProductValuesVar.ProductCode} Equals {!Add_Products.ProductCode}
+{!NewProductValuesVar.Quantity} Equals {!UpdateQuantityNewOpps}
+{!NewProductValuesVar.ServiceDate} Equals {!Add_Products.ServiceDate}
+{!NewProductValuesVar.SortOrder} Equals {!Add_Products.SortOrder}
+{!NewProductValuesVar.TotalPrice} Equals {!UpdatedTotalPriceNewOpps}
+{!NewProductValuesVar.UnitPrice} Equals null
+Result
+{!NewProductValuesVar.Product2Id} = "01t25000006kmTaAAI"
+{!NewProductValuesVar.TotalPrice} = "6,750"
+{!NewProductValuesVar.Quantity} = "2.25"
+{!NewProductValuesVar.Description} = "null"
+{!NewProductValuesVar.Name} = "Timing Test 13 Microsoft SQL Server 9-5 (Per instance)"
+{!NewProductValuesVar.PricebookEntryId} = "01u25000009JCWsAAO"
+{!NewProductValuesVar.ProductCode} = "SQL_247_REA"
+{!NewProductValuesVar.SortOrder} = "null"
+{!NewProductValuesVar.OpportunityId} = "0062500000RtaqfAAB"
+{!NewProductValuesVar.UnitPrice} = "null"
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} = "null"
+{!NewProductValuesVar.ServiceDate} = "null"
+ASSIGNMENT: Assign New Products Collection
+{!NewOppProductsCollectionVar} Add {!NewProductValuesVar}
+Result
+{!NewOppProductsCollectionVar} = "[OpportunityLineItem (No ID),OpportunityLineItem (No ID)]"
+LOOP: Add Products
+End Loop.
+LOOP: All New Opps Loop
+Loop Through: [0062500000RtaqfAAB,0062500000RtaqgAAB,0062500000RtaqhAAB,0062500000RtaqiAAB,0062500000RtaqjAAB,0062500000RtaqkAAB,0062500000RtaqlAAB]
+Iteration: 1
+Current iteration item: 0062500000RtaqgAAB
+LOOP: Add Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 0
+Current iteration item: 00k25000007SJNrAAO
+ASSIGNMENT: Assign New Product Values
+{!NewProductValuesVar.Description} Equals {!Add_Products.Description}
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} Equals {!Add_Products.Item_Cost_to_Xynomix__c}
+{!NewProductValuesVar.Name} Equals {!Add_Products.Name}
+{!NewProductValuesVar.OpportunityId} Equals {!All_New_Opps_Loop.Id}
+{!NewProductValuesVar.PricebookEntryId} Equals {!Add_Products.PricebookEntryId}
+{!NewProductValuesVar.Product2Id} Equals {!Add_Products.Product2Id}
+{!NewProductValuesVar.ProductCode} Equals {!Add_Products.ProductCode}
+{!NewProductValuesVar.Quantity} Equals {!UpdateQuantityNewOpps}
+{!NewProductValuesVar.ServiceDate} Equals {!Add_Products.ServiceDate}
+{!NewProductValuesVar.SortOrder} Equals {!Add_Products.SortOrder}
+{!NewProductValuesVar.TotalPrice} Equals {!UpdatedTotalPriceNewOpps}
+{!NewProductValuesVar.UnitPrice} Equals null
+Result
+{!NewProductValuesVar.Product2Id} = "01t25000006kmTZAAY"
+{!NewProductValuesVar.TotalPrice} = "15,750"
+{!NewProductValuesVar.Quantity} = "1.75"
+{!NewProductValuesVar.Description} = "null"
+{!NewProductValuesVar.Name} = "Timing Test 13 Microsoft SQL Server 24x7x365 (Per instance)"
+{!NewProductValuesVar.PricebookEntryId} = "01u25000009JCWrAAO"
+{!NewProductValuesVar.ProductCode} = "SQL_247_MON"
+{!NewProductValuesVar.SortOrder} = "null"
+{!NewProductValuesVar.OpportunityId} = "0062500000RtaqgAAB"
+{!NewProductValuesVar.UnitPrice} = "null"
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} = "null"
+{!NewProductValuesVar.ServiceDate} = "null"
+ASSIGNMENT: Assign New Products Collection
+{!NewOppProductsCollectionVar} Add {!NewProductValuesVar}
+Result
+{!NewOppProductsCollectionVar} = "[OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID)]"
+LOOP: Add Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 1
+Current iteration item: 00k25000007SJNsAAO
+ASSIGNMENT: Assign New Product Values
+{!NewProductValuesVar.Description} Equals {!Add_Products.Description}
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} Equals {!Add_Products.Item_Cost_to_Xynomix__c}
+{!NewProductValuesVar.Name} Equals {!Add_Products.Name}
+{!NewProductValuesVar.OpportunityId} Equals {!All_New_Opps_Loop.Id}
+{!NewProductValuesVar.PricebookEntryId} Equals {!Add_Products.PricebookEntryId}
+{!NewProductValuesVar.Product2Id} Equals {!Add_Products.Product2Id}
+{!NewProductValuesVar.ProductCode} Equals {!Add_Products.ProductCode}
+{!NewProductValuesVar.Quantity} Equals {!UpdateQuantityNewOpps}
+{!NewProductValuesVar.ServiceDate} Equals {!Add_Products.ServiceDate}
+{!NewProductValuesVar.SortOrder} Equals {!Add_Products.SortOrder}
+{!NewProductValuesVar.TotalPrice} Equals {!UpdatedTotalPriceNewOpps}
+{!NewProductValuesVar.UnitPrice} Equals null
+Result
+{!NewProductValuesVar.Product2Id} = "01t25000006kmTaAAI"
+{!NewProductValuesVar.TotalPrice} = "6,750"
+{!NewProductValuesVar.Quantity} = "2.25"
+{!NewProductValuesVar.Description} = "null"
+{!NewProductValuesVar.Name} = "Timing Test 13 Microsoft SQL Server 9-5 (Per instance)"
+{!NewProductValuesVar.PricebookEntryId} = "01u25000009JCWsAAO"
+{!NewProductValuesVar.ProductCode} = "SQL_247_REA"
+{!NewProductValuesVar.SortOrder} = "null"
+{!NewProductValuesVar.OpportunityId} = "0062500000RtaqgAAB"
+{!NewProductValuesVar.UnitPrice} = "null"
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} = "null"
+{!NewProductValuesVar.ServiceDate} = "null"
+ASSIGNMENT: Assign New Products Collection
+{!NewOppProductsCollectionVar} Add {!NewProductValuesVar}
+Result
+{!NewOppProductsCollectionVar} = "[OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID)]"
+LOOP: Add Products
+End Loop.
+LOOP: All New Opps Loop
+Loop Through: [0062500000RtaqfAAB,0062500000RtaqgAAB,0062500000RtaqhAAB,0062500000RtaqiAAB,0062500000RtaqjAAB,0062500000RtaqkAAB,0062500000RtaqlAAB]
+Iteration: 2
+Current iteration item: 0062500000RtaqhAAB
+LOOP: Add Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 0
+Current iteration item: 00k25000007SJNrAAO
+ASSIGNMENT: Assign New Product Values
+{!NewProductValuesVar.Description} Equals {!Add_Products.Description}
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} Equals {!Add_Products.Item_Cost_to_Xynomix__c}
+{!NewProductValuesVar.Name} Equals {!Add_Products.Name}
+{!NewProductValuesVar.OpportunityId} Equals {!All_New_Opps_Loop.Id}
+{!NewProductValuesVar.PricebookEntryId} Equals {!Add_Products.PricebookEntryId}
+{!NewProductValuesVar.Product2Id} Equals {!Add_Products.Product2Id}
+{!NewProductValuesVar.ProductCode} Equals {!Add_Products.ProductCode}
+{!NewProductValuesVar.Quantity} Equals {!UpdateQuantityNewOpps}
+{!NewProductValuesVar.ServiceDate} Equals {!Add_Products.ServiceDate}
+{!NewProductValuesVar.SortOrder} Equals {!Add_Products.SortOrder}
+{!NewProductValuesVar.TotalPrice} Equals {!UpdatedTotalPriceNewOpps}
+{!NewProductValuesVar.UnitPrice} Equals null
+Result
+{!NewProductValuesVar.Product2Id} = "01t25000006kmTZAAY"
+{!NewProductValuesVar.TotalPrice} = "15,750"
+{!NewProductValuesVar.Quantity} = "1.75"
+{!NewProductValuesVar.Description} = "null"
+{!NewProductValuesVar.Name} = "Timing Test 13 Microsoft SQL Server 24x7x365 (Per instance)"
+{!NewProductValuesVar.PricebookEntryId} = "01u25000009JCWrAAO"
+{!NewProductValuesVar.ProductCode} = "SQL_247_MON"
+{!NewProductValuesVar.SortOrder} = "null"
+{!NewProductValuesVar.OpportunityId} = "0062500000RtaqhAAB"
+{!NewProductValuesVar.UnitPrice} = "null"
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} = "null"
+{!NewProductValuesVar.ServiceDate} = "null"
+ASSIGNMENT: Assign New Products Collection
+{!NewOppProductsCollectionVar} Add {!NewProductValuesVar}
+Result
+{!NewOppProductsCollectionVar} = "[OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID)]"
+LOOP: Add Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 1
+Current iteration item: 00k25000007SJNsAAO
+ASSIGNMENT: Assign New Product Values
+{!NewProductValuesVar.Description} Equals {!Add_Products.Description}
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} Equals {!Add_Products.Item_Cost_to_Xynomix__c}
+{!NewProductValuesVar.Name} Equals {!Add_Products.Name}
+{!NewProductValuesVar.OpportunityId} Equals {!All_New_Opps_Loop.Id}
+{!NewProductValuesVar.PricebookEntryId} Equals {!Add_Products.PricebookEntryId}
+{!NewProductValuesVar.Product2Id} Equals {!Add_Products.Product2Id}
+{!NewProductValuesVar.ProductCode} Equals {!Add_Products.ProductCode}
+{!NewProductValuesVar.Quantity} Equals {!UpdateQuantityNewOpps}
+{!NewProductValuesVar.ServiceDate} Equals {!Add_Products.ServiceDate}
+{!NewProductValuesVar.SortOrder} Equals {!Add_Products.SortOrder}
+{!NewProductValuesVar.TotalPrice} Equals {!UpdatedTotalPriceNewOpps}
+{!NewProductValuesVar.UnitPrice} Equals null
+Result
+{!NewProductValuesVar.Product2Id} = "01t25000006kmTaAAI"
+{!NewProductValuesVar.TotalPrice} = "6,750"
+{!NewProductValuesVar.Quantity} = "2.25"
+{!NewProductValuesVar.Description} = "null"
+{!NewProductValuesVar.Name} = "Timing Test 13 Microsoft SQL Server 9-5 (Per instance)"
+{!NewProductValuesVar.PricebookEntryId} = "01u25000009JCWsAAO"
+{!NewProductValuesVar.ProductCode} = "SQL_247_REA"
+{!NewProductValuesVar.SortOrder} = "null"
+{!NewProductValuesVar.OpportunityId} = "0062500000RtaqhAAB"
+{!NewProductValuesVar.UnitPrice} = "null"
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} = "null"
+{!NewProductValuesVar.ServiceDate} = "null"
+ASSIGNMENT: Assign New Products Collection
+{!NewOppProductsCollectionVar} Add {!NewProductValuesVar}
+Result
+{!NewOppProductsCollectionVar} = "[OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID)]"
+LOOP: Add Products
+End Loop.
+LOOP: All New Opps Loop
+Loop Through: [0062500000RtaqfAAB,0062500000RtaqgAAB,0062500000RtaqhAAB,0062500000RtaqiAAB,0062500000RtaqjAAB,0062500000RtaqkAAB,0062500000RtaqlAAB]
+Iteration: 3
+Current iteration item: 0062500000RtaqiAAB
+LOOP: Add Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 0
+Current iteration item: 00k25000007SJNrAAO
+ASSIGNMENT: Assign New Product Values
+{!NewProductValuesVar.Description} Equals {!Add_Products.Description}
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} Equals {!Add_Products.Item_Cost_to_Xynomix__c}
+{!NewProductValuesVar.Name} Equals {!Add_Products.Name}
+{!NewProductValuesVar.OpportunityId} Equals {!All_New_Opps_Loop.Id}
+{!NewProductValuesVar.PricebookEntryId} Equals {!Add_Products.PricebookEntryId}
+{!NewProductValuesVar.Product2Id} Equals {!Add_Products.Product2Id}
+{!NewProductValuesVar.ProductCode} Equals {!Add_Products.ProductCode}
+{!NewProductValuesVar.Quantity} Equals {!UpdateQuantityNewOpps}
+{!NewProductValuesVar.ServiceDate} Equals {!Add_Products.ServiceDate}
+{!NewProductValuesVar.SortOrder} Equals {!Add_Products.SortOrder}
+{!NewProductValuesVar.TotalPrice} Equals {!UpdatedTotalPriceNewOpps}
+{!NewProductValuesVar.UnitPrice} Equals null
+Result
+{!NewProductValuesVar.Product2Id} = "01t25000006kmTZAAY"
+{!NewProductValuesVar.TotalPrice} = "15,750"
+{!NewProductValuesVar.Quantity} = "1.75"
+{!NewProductValuesVar.Description} = "null"
+{!NewProductValuesVar.Name} = "Timing Test 13 Microsoft SQL Server 24x7x365 (Per instance)"
+{!NewProductValuesVar.PricebookEntryId} = "01u25000009JCWrAAO"
+{!NewProductValuesVar.ProductCode} = "SQL_247_MON"
+{!NewProductValuesVar.SortOrder} = "null"
+{!NewProductValuesVar.OpportunityId} = "0062500000RtaqiAAB"
+{!NewProductValuesVar.UnitPrice} = "null"
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} = "null"
+{!NewProductValuesVar.ServiceDate} = "null"
+ASSIGNMENT: Assign New Products Collection
+{!NewOppProductsCollectionVar} Add {!NewProductValuesVar}
+Result
+{!NewOppProductsCollectionVar} = "[OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID)]"
+LOOP: Add Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 1
+Current iteration item: 00k25000007SJNsAAO
+ASSIGNMENT: Assign New Product Values
+{!NewProductValuesVar.Description} Equals {!Add_Products.Description}
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} Equals {!Add_Products.Item_Cost_to_Xynomix__c}
+{!NewProductValuesVar.Name} Equals {!Add_Products.Name}
+{!NewProductValuesVar.OpportunityId} Equals {!All_New_Opps_Loop.Id}
+{!NewProductValuesVar.PricebookEntryId} Equals {!Add_Products.PricebookEntryId}
+{!NewProductValuesVar.Product2Id} Equals {!Add_Products.Product2Id}
+{!NewProductValuesVar.ProductCode} Equals {!Add_Products.ProductCode}
+{!NewProductValuesVar.Quantity} Equals {!UpdateQuantityNewOpps}
+{!NewProductValuesVar.ServiceDate} Equals {!Add_Products.ServiceDate}
+{!NewProductValuesVar.SortOrder} Equals {!Add_Products.SortOrder}
+{!NewProductValuesVar.TotalPrice} Equals {!UpdatedTotalPriceNewOpps}
+{!NewProductValuesVar.UnitPrice} Equals null
+Result
+{!NewProductValuesVar.Product2Id} = "01t25000006kmTaAAI"
+{!NewProductValuesVar.TotalPrice} = "6,750"
+{!NewProductValuesVar.Quantity} = "2.25"
+{!NewProductValuesVar.Description} = "null"
+{!NewProductValuesVar.Name} = "Timing Test 13 Microsoft SQL Server 9-5 (Per instance)"
+{!NewProductValuesVar.PricebookEntryId} = "01u25000009JCWsAAO"
+{!NewProductValuesVar.ProductCode} = "SQL_247_REA"
+{!NewProductValuesVar.SortOrder} = "null"
+{!NewProductValuesVar.OpportunityId} = "0062500000RtaqiAAB"
+{!NewProductValuesVar.UnitPrice} = "null"
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} = "null"
+{!NewProductValuesVar.ServiceDate} = "null"
+ASSIGNMENT: Assign New Products Collection
+{!NewOppProductsCollectionVar} Add {!NewProductValuesVar}
+Result
+{!NewOppProductsCollectionVar} = "[OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID)]"
+LOOP: Add Products
+End Loop.
+LOOP: All New Opps Loop
+Loop Through: [0062500000RtaqfAAB,0062500000RtaqgAAB,0062500000RtaqhAAB,0062500000RtaqiAAB,0062500000RtaqjAAB,0062500000RtaqkAAB,0062500000RtaqlAAB]
+Iteration: 4
+Current iteration item: 0062500000RtaqjAAB
+LOOP: Add Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 0
+Current iteration item: 00k25000007SJNrAAO
+ASSIGNMENT: Assign New Product Values
+{!NewProductValuesVar.Description} Equals {!Add_Products.Description}
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} Equals {!Add_Products.Item_Cost_to_Xynomix__c}
+{!NewProductValuesVar.Name} Equals {!Add_Products.Name}
+{!NewProductValuesVar.OpportunityId} Equals {!All_New_Opps_Loop.Id}
+{!NewProductValuesVar.PricebookEntryId} Equals {!Add_Products.PricebookEntryId}
+{!NewProductValuesVar.Product2Id} Equals {!Add_Products.Product2Id}
+{!NewProductValuesVar.ProductCode} Equals {!Add_Products.ProductCode}
+{!NewProductValuesVar.Quantity} Equals {!UpdateQuantityNewOpps}
+{!NewProductValuesVar.ServiceDate} Equals {!Add_Products.ServiceDate}
+{!NewProductValuesVar.SortOrder} Equals {!Add_Products.SortOrder}
+{!NewProductValuesVar.TotalPrice} Equals {!UpdatedTotalPriceNewOpps}
+{!NewProductValuesVar.UnitPrice} Equals null
+Result
+{!NewProductValuesVar.Product2Id} = "01t25000006kmTZAAY"
+{!NewProductValuesVar.TotalPrice} = "15,750"
+{!NewProductValuesVar.Quantity} = "1.75"
+{!NewProductValuesVar.Description} = "null"
+{!NewProductValuesVar.Name} = "Timing Test 13 Microsoft SQL Server 24x7x365 (Per instance)"
+{!NewProductValuesVar.PricebookEntryId} = "01u25000009JCWrAAO"
+{!NewProductValuesVar.ProductCode} = "SQL_247_MON"
+{!NewProductValuesVar.SortOrder} = "null"
+{!NewProductValuesVar.OpportunityId} = "0062500000RtaqjAAB"
+{!NewProductValuesVar.UnitPrice} = "null"
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} = "null"
+{!NewProductValuesVar.ServiceDate} = "null"
+ASSIGNMENT: Assign New Products Collection
+{!NewOppProductsCollectionVar} Add {!NewProductValuesVar}
+Result
+{!NewOppProductsCollectionVar} = "[OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID)]"
+LOOP: Add Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 1
+Current iteration item: 00k25000007SJNsAAO
+ASSIGNMENT: Assign New Product Values
+{!NewProductValuesVar.Description} Equals {!Add_Products.Description}
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} Equals {!Add_Products.Item_Cost_to_Xynomix__c}
+{!NewProductValuesVar.Name} Equals {!Add_Products.Name}
+{!NewProductValuesVar.OpportunityId} Equals {!All_New_Opps_Loop.Id}
+{!NewProductValuesVar.PricebookEntryId} Equals {!Add_Products.PricebookEntryId}
+{!NewProductValuesVar.Product2Id} Equals {!Add_Products.Product2Id}
+{!NewProductValuesVar.ProductCode} Equals {!Add_Products.ProductCode}
+{!NewProductValuesVar.Quantity} Equals {!UpdateQuantityNewOpps}
+{!NewProductValuesVar.ServiceDate} Equals {!Add_Products.ServiceDate}
+{!NewProductValuesVar.SortOrder} Equals {!Add_Products.SortOrder}
+{!NewProductValuesVar.TotalPrice} Equals {!UpdatedTotalPriceNewOpps}
+{!NewProductValuesVar.UnitPrice} Equals null
+Result
+{!NewProductValuesVar.Product2Id} = "01t25000006kmTaAAI"
+{!NewProductValuesVar.TotalPrice} = "6,750"
+{!NewProductValuesVar.Quantity} = "2.25"
+{!NewProductValuesVar.Description} = "null"
+{!NewProductValuesVar.Name} = "Timing Test 13 Microsoft SQL Server 9-5 (Per instance)"
+{!NewProductValuesVar.PricebookEntryId} = "01u25000009JCWsAAO"
+{!NewProductValuesVar.ProductCode} = "SQL_247_REA"
+{!NewProductValuesVar.SortOrder} = "null"
+{!NewProductValuesVar.OpportunityId} = "0062500000RtaqjAAB"
+{!NewProductValuesVar.UnitPrice} = "null"
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} = "null"
+{!NewProductValuesVar.ServiceDate} = "null"
+ASSIGNMENT: Assign New Products Collection
+{!NewOppProductsCollectionVar} Add {!NewProductValuesVar}
+Result
+{!NewOppProductsCollectionVar} = "[OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID)]"
+LOOP: Add Products
+End Loop.
+LOOP: All New Opps Loop
+Loop Through: [0062500000RtaqfAAB,0062500000RtaqgAAB,0062500000RtaqhAAB,0062500000RtaqiAAB,0062500000RtaqjAAB,0062500000RtaqkAAB,0062500000RtaqlAAB]
+Iteration: 5
+Current iteration item: 0062500000RtaqkAAB
+LOOP: Add Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 0
+Current iteration item: 00k25000007SJNrAAO
+ASSIGNMENT: Assign New Product Values
+{!NewProductValuesVar.Description} Equals {!Add_Products.Description}
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} Equals {!Add_Products.Item_Cost_to_Xynomix__c}
+{!NewProductValuesVar.Name} Equals {!Add_Products.Name}
+{!NewProductValuesVar.OpportunityId} Equals {!All_New_Opps_Loop.Id}
+{!NewProductValuesVar.PricebookEntryId} Equals {!Add_Products.PricebookEntryId}
+{!NewProductValuesVar.Product2Id} Equals {!Add_Products.Product2Id}
+{!NewProductValuesVar.ProductCode} Equals {!Add_Products.ProductCode}
+{!NewProductValuesVar.Quantity} Equals {!UpdateQuantityNewOpps}
+{!NewProductValuesVar.ServiceDate} Equals {!Add_Products.ServiceDate}
+{!NewProductValuesVar.SortOrder} Equals {!Add_Products.SortOrder}
+{!NewProductValuesVar.TotalPrice} Equals {!UpdatedTotalPriceNewOpps}
+{!NewProductValuesVar.UnitPrice} Equals null
+Result
+{!NewProductValuesVar.Product2Id} = "01t25000006kmTZAAY"
+{!NewProductValuesVar.TotalPrice} = "15,750"
+{!NewProductValuesVar.Quantity} = "1.75"
+{!NewProductValuesVar.Description} = "null"
+{!NewProductValuesVar.Name} = "Timing Test 13 Microsoft SQL Server 24x7x365 (Per instance)"
+{!NewProductValuesVar.PricebookEntryId} = "01u25000009JCWrAAO"
+{!NewProductValuesVar.ProductCode} = "SQL_247_MON"
+{!NewProductValuesVar.SortOrder} = "null"
+{!NewProductValuesVar.OpportunityId} = "0062500000RtaqkAAB"
+{!NewProductValuesVar.UnitPrice} = "null"
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} = "null"
+{!NewProductValuesVar.ServiceDate} = "null"
+ASSIGNMENT: Assign New Products Collection
+{!NewOppProductsCollectionVar} Add {!NewProductValuesVar}
+Result
+{!NewOppProductsCollectionVar} = "[OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID)]"
+LOOP: Add Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 1
+Current iteration item: 00k25000007SJNsAAO
+ASSIGNMENT: Assign New Product Values
+{!NewProductValuesVar.Description} Equals {!Add_Products.Description}
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} Equals {!Add_Products.Item_Cost_to_Xynomix__c}
+{!NewProductValuesVar.Name} Equals {!Add_Products.Name}
+{!NewProductValuesVar.OpportunityId} Equals {!All_New_Opps_Loop.Id}
+{!NewProductValuesVar.PricebookEntryId} Equals {!Add_Products.PricebookEntryId}
+{!NewProductValuesVar.Product2Id} Equals {!Add_Products.Product2Id}
+{!NewProductValuesVar.ProductCode} Equals {!Add_Products.ProductCode}
+{!NewProductValuesVar.Quantity} Equals {!UpdateQuantityNewOpps}
+{!NewProductValuesVar.ServiceDate} Equals {!Add_Products.ServiceDate}
+{!NewProductValuesVar.SortOrder} Equals {!Add_Products.SortOrder}
+{!NewProductValuesVar.TotalPrice} Equals {!UpdatedTotalPriceNewOpps}
+{!NewProductValuesVar.UnitPrice} Equals null
+Result
+{!NewProductValuesVar.Product2Id} = "01t25000006kmTaAAI"
+{!NewProductValuesVar.TotalPrice} = "6,750"
+{!NewProductValuesVar.Quantity} = "2.25"
+{!NewProductValuesVar.Description} = "null"
+{!NewProductValuesVar.Name} = "Timing Test 13 Microsoft SQL Server 9-5 (Per instance)"
+{!NewProductValuesVar.PricebookEntryId} = "01u25000009JCWsAAO"
+{!NewProductValuesVar.ProductCode} = "SQL_247_REA"
+{!NewProductValuesVar.SortOrder} = "null"
+{!NewProductValuesVar.OpportunityId} = "0062500000RtaqkAAB"
+{!NewProductValuesVar.UnitPrice} = "null"
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} = "null"
+{!NewProductValuesVar.ServiceDate} = "null"
+ASSIGNMENT: Assign New Products Collection
+{!NewOppProductsCollectionVar} Add {!NewProductValuesVar}
+Result
+{!NewOppProductsCollectionVar} = "[OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID)]"
+LOOP: Add Products
+End Loop.
+LOOP: All New Opps Loop
+Loop Through: [0062500000RtaqfAAB,0062500000RtaqgAAB,0062500000RtaqhAAB,0062500000RtaqiAAB,0062500000RtaqjAAB,0062500000RtaqkAAB,0062500000RtaqlAAB]
+Iteration: 6
+Current iteration item: 0062500000RtaqlAAB
+LOOP: Add Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 0
+Current iteration item: 00k25000007SJNrAAO
+ASSIGNMENT: Assign New Product Values
+{!NewProductValuesVar.Description} Equals {!Add_Products.Description}
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} Equals {!Add_Products.Item_Cost_to_Xynomix__c}
+{!NewProductValuesVar.Name} Equals {!Add_Products.Name}
+{!NewProductValuesVar.OpportunityId} Equals {!All_New_Opps_Loop.Id}
+{!NewProductValuesVar.PricebookEntryId} Equals {!Add_Products.PricebookEntryId}
+{!NewProductValuesVar.Product2Id} Equals {!Add_Products.Product2Id}
+{!NewProductValuesVar.ProductCode} Equals {!Add_Products.ProductCode}
+{!NewProductValuesVar.Quantity} Equals {!UpdateQuantityNewOpps}
+{!NewProductValuesVar.ServiceDate} Equals {!Add_Products.ServiceDate}
+{!NewProductValuesVar.SortOrder} Equals {!Add_Products.SortOrder}
+{!NewProductValuesVar.TotalPrice} Equals {!UpdatedTotalPriceNewOpps}
+{!NewProductValuesVar.UnitPrice} Equals null
+Result
+{!NewProductValuesVar.Product2Id} = "01t25000006kmTZAAY"
+{!NewProductValuesVar.TotalPrice} = "15,750"
+{!NewProductValuesVar.Quantity} = "1.75"
+{!NewProductValuesVar.Description} = "null"
+{!NewProductValuesVar.Name} = "Timing Test 13 Microsoft SQL Server 24x7x365 (Per instance)"
+{!NewProductValuesVar.PricebookEntryId} = "01u25000009JCWrAAO"
+{!NewProductValuesVar.ProductCode} = "SQL_247_MON"
+{!NewProductValuesVar.SortOrder} = "null"
+{!NewProductValuesVar.OpportunityId} = "0062500000RtaqlAAB"
+{!NewProductValuesVar.UnitPrice} = "null"
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} = "null"
+{!NewProductValuesVar.ServiceDate} = "null"
+ASSIGNMENT: Assign New Products Collection
+{!NewOppProductsCollectionVar} Add {!NewProductValuesVar}
+Result
+{!NewOppProductsCollectionVar} = "[OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID)]"
+LOOP: Add Products
+Loop Through: [00k25000007SJNrAAO,00k25000007SJNsAAO]
+Iteration: 1
+Current iteration item: 00k25000007SJNsAAO
+ASSIGNMENT: Assign New Product Values
+{!NewProductValuesVar.Description} Equals {!Add_Products.Description}
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} Equals {!Add_Products.Item_Cost_to_Xynomix__c}
+{!NewProductValuesVar.Name} Equals {!Add_Products.Name}
+{!NewProductValuesVar.OpportunityId} Equals {!All_New_Opps_Loop.Id}
+{!NewProductValuesVar.PricebookEntryId} Equals {!Add_Products.PricebookEntryId}
+{!NewProductValuesVar.Product2Id} Equals {!Add_Products.Product2Id}
+{!NewProductValuesVar.ProductCode} Equals {!Add_Products.ProductCode}
+{!NewProductValuesVar.Quantity} Equals {!UpdateQuantityNewOpps}
+{!NewProductValuesVar.ServiceDate} Equals {!Add_Products.ServiceDate}
+{!NewProductValuesVar.SortOrder} Equals {!Add_Products.SortOrder}
+{!NewProductValuesVar.TotalPrice} Equals {!UpdatedTotalPriceNewOpps}
+{!NewProductValuesVar.UnitPrice} Equals null
+Result
+{!NewProductValuesVar.Product2Id} = "01t25000006kmTaAAI"
+{!NewProductValuesVar.TotalPrice} = "6,750"
+{!NewProductValuesVar.Quantity} = "2.25"
+{!NewProductValuesVar.Description} = "null"
+{!NewProductValuesVar.Name} = "Timing Test 13 Microsoft SQL Server 9-5 (Per instance)"
+{!NewProductValuesVar.PricebookEntryId} = "01u25000009JCWsAAO"
+{!NewProductValuesVar.ProductCode} = "SQL_247_REA"
+{!NewProductValuesVar.SortOrder} = "null"
+{!NewProductValuesVar.OpportunityId} = "0062500000RtaqlAAB"
+{!NewProductValuesVar.UnitPrice} = "null"
+{!NewProductValuesVar.Item_Cost_to_Xynomix__c} = "null"
+{!NewProductValuesVar.ServiceDate} = "null"
+ASSIGNMENT: Assign New Products Collection
+{!NewOppProductsCollectionVar} Add {!NewProductValuesVar}
+Result
+{!NewOppProductsCollectionVar} = "[OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID),OpportunityLineItem (No ID)]"
+LOOP: Add Products
+End Loop.
+LOOP: All New Opps Loop
+End Loop.
+CREATE RECORDS: Create New Opp Products
+Create OpportunityLineItem records using the values that are stored in {!NewOppProductsCollectionVar}.
+Variable Values
+[Description=null,Item_Cost_to_Xynomix__c=null,Name=Timing Test 13 Microsoft SQL Server 24x7x365 (Per instance),OpportunityId=0062500000RtaqfAAB,PricebookEntryId=01u25000009JCWrAAO,Product2Id=01t25000006kmTZAAY,ProductCode=SQL_247_MON,Quantity=1.750,ServiceDate=null,SortOrder=null,TotalPrice=15750.000,UnitPrice=null]
+[Description=null,Item_Cost_to_Xynomix__c=null,Name=Timing Test 13 Microsoft SQL Server 9-5 (Per instance),OpportunityId=0062500000RtaqfAAB,PricebookEntryId=01u25000009JCWsAAO,Product2Id=01t25000006kmTaAAI,ProductCode=SQL_247_REA,Quantity=2.250,ServiceDate=null,SortOrder=null,TotalPrice=6750.000,UnitPrice=null]
+[Description=null,Item_Cost_to_Xynomix__c=null,Name=Timing Test 13 Microsoft SQL Server 24x7x365 (Per instance),OpportunityId=0062500000RtaqgAAB,PricebookEntryId=01u25000009JCWrAAO,Product2Id=01t25000006kmTZAAY,ProductCode=SQL_247_MON,Quantity=1.750,ServiceDate=null,SortOrder=null,TotalPrice=15750.000,UnitPrice=null]
+[Description=null,Item_Cost_to_Xynomix__c=null,Name=Timing Test 13 Microsoft SQL Server 9-5 (Per instance),OpportunityId=0062500000RtaqgAAB,PricebookEntryId=01u25000009JCWsAAO,Product2Id=01t25000006kmTaAAI,ProductCode=SQL_247_REA,Quantity=2.250,ServiceDate=null,SortOrder=null,TotalPrice=6750.000,UnitPrice=null]
+[Description=null,Item_Cost_to_Xynomix__c=null,Name=Timing Test 13 Microsoft SQL Server 24x7x365 (Per instance),OpportunityId=0062500000RtaqhAAB,PricebookEntryId=01u25000009JCWrAAO,Product2Id=01t25000006kmTZAAY,ProductCode=SQL_247_MON,Quantity=1.750,ServiceDate=null,SortOrder=null,TotalPrice=15750.000,UnitPrice=null]
+[Description=null,Item_Cost_to_Xynomix__c=null,Name=Timing Test 13 Microsoft SQL Server 9-5 (Per instance),OpportunityId=0062500000RtaqhAAB,PricebookEntryId=01u25000009JCWsAAO,Product2Id=01t25000006kmTaAAI,ProductCode=SQL_247_REA,Quantity=2.250,ServiceDate=null,SortOrder=null,TotalPrice=6750.000,UnitPrice=null]
+[Description=null,Item_Cost_to_Xynomix__c=null,Name=Timing Test 13 Microsoft SQL Server 24x7x365 (Per instance),OpportunityId=0062500000RtaqiAAB,PricebookEntryId=01u25000009JCWrAAO,Product2Id=01t25000006kmTZAAY,ProductCode=SQL_247_MON,Quantity=1.750,ServiceDate=null,SortOrder=null,TotalPrice=15750.000,UnitPrice=null]
+[Description=null,Item_Cost_to_Xynomix__c=null,Name=Timing Test 13 Microsoft SQL Server 9-5 (Per instance),OpportunityId=0062500000RtaqiAAB,PricebookEntryId=01u25000009JCWsAAO,Product2Id=01t25000006kmTaAAI,ProductCode=SQL_247_REA,Quantity=2.250,ServiceDate=null,SortOrder=null,TotalPrice=6750.000,UnitPrice=null]
+[Description=null,Item_Cost_to_Xynomix__c=null,Name=Timing Test 13 Microsoft SQL Server 24x7x365 (Per instance),OpportunityId=0062500000RtaqjAAB,PricebookEntryId=01u25000009JCWrAAO,Product2Id=01t25000006kmTZAAY,ProductCode=SQL_247_MON,Quantity=1.750,ServiceDate=null,SortOrder=null,TotalPrice=15750.000,UnitPrice=null]
+[Description=null,Item_Cost_to_Xynomix__c=null,Name=Timing Test 13 Microsoft SQL Server 9-5 (Per instance),OpportunityId=0062500000RtaqjAAB,PricebookEntryId=01u25000009JCWsAAO,Product2Id=01t25000006kmTaAAI,ProductCode=SQL_247_REA,Quantity=2.250,ServiceDate=null,SortOrder=null,TotalPrice=6750.000,UnitPrice=null]
+[Description=null,Item_Cost_to_Xynomix__c=null,Name=Timing Test 13 Microsoft SQL Server 24x7x365 (Per instance),OpportunityId=0062500000RtaqkAAB,PricebookEntryId=01u25000009JCWrAAO,Product2Id=01t25000006kmTZAAY,ProductCode=SQL_247_MON,Quantity=1.750,ServiceDate=null,SortOrder=null,TotalPrice=15750.000,UnitPrice=null]
+[Description=null,Item_Cost_to_Xynomix__c=null,Name=Timing Test 13 Microsoft SQL Server 9-5 (Per instance),OpportunityId=0062500000RtaqkAAB,PricebookEntryId=01u25000009JCWsAAO,Product2Id=01t25000006kmTaAAI,ProductCode=SQL_247_REA,Quantity=2.250,ServiceDate=null,SortOrder=null,TotalPrice=6750.000,UnitPrice=null]
+[Description=null,Item_Cost_to_Xynomix__c=null,Name=Timing Test 13 Microsoft SQL Server 24x7x365 (Per instance),OpportunityId=0062500000RtaqlAAB,PricebookEntryId=01u25000009JCWrAAO,Product2Id=01t25000006kmTZAAY,ProductCode=SQL_247_MON,Quantity=1.750,ServiceDate=null,SortOrder=null,TotalPrice=15750.000,UnitPrice=null]
+[Description=null,Item_Cost_to_Xynomix__c=null,Name=Timing Test 13 Microsoft SQL Server 9-5 (Per instance),OpportunityId=0062500000RtaqlAAB,PricebookEntryId=01u25000009JCWsAAO,Product2Id=01t25000006kmTaAAI,ProductCode=SQL_247_REA,Quantity=2.250,ServiceDate=null,SortOrder=null,TotalPrice=6750.000,UnitPrice=null]
+Result
+Failed to create records.
+Error Occurred: This error occurred when the flow tried to create records: FIELD_INTEGRITY_EXCEPTION: field integrity exception: TotalPrice (total price must be specified). You can look up ExceptionCode values in the SOAP API Developer Guide.---This error occurred when the flow tried to create records: FIELD_INTEGRITY_EXCEPTION: field integrity exception: unknown (total price must be specified). You can look up ExceptionCode values in the SOAP API Developer Guide.---This error occurred when the flow tried to create records: FIELD_INTEGRITY_EXCEPTION: field integrity exception: unknown (total price must be specified). You can look up ExceptionCode values in the SOAP API Developer Guide.---This error occurred when the flow tried to create records: FIELD_INTEGRITY_EXCEPTION: field integrity exception: unknown (total price must be specified). You can look up ExceptionCode values in the SOAP API Developer Guide.---This error occurred when the flow tried to create records: FIELD_INTEGRITY_EXCEPTION: field integrity exception: unknown (total price must be specified). You can look up ExceptionCode values in the SOAP API Developer Guide.---This error occurred when the flow tried to create records: FIELD_INTEGRITY_EXCEPTION: field integrity exception: unknown (total price must be specified). You can look up ExceptionCode values in the SOAP API Developer Guide.---This error occurred when the flow tried to create records: FIELD_INTEGRITY_EXCEPTION: field integrity exception: unknown (total price must be specified). You can look up ExceptionCode values in the SOAP API Developer Guide.---This error occurred when the flow tried to create records: FIELD_INTEGRITY_EXCEPTION: field integrity exception: unknown (total price must be specified). You can look up ExceptionCode values in the SOAP API Developer Guide.---This error occurred when the flow tried to create records: FIELD_INTEGRITY_EXCEPTION: field integrity exception: unknown (total price must be specified). You can look up ExceptionCode values in the SOAP API Developer Guide.---This error occurred when the flow tried to create records: FIELD_INTEGRITY_EXCEPTION: field integrity exception: unknown (total price must be specified). You can look up ExceptionCode values in the SOAP API Developer Guide.---This error occurred when the flow tried to create records: FIELD_INTEGRITY_EXCEPTION: field integrity exception: unknown (total price must be specified). You can look up ExceptionCode values in the SOAP API Developer Guide.---This error occurred when the flow tried to create records: FIELD_INTEGRITY_EXCEPTION: field integrity exception: unknown (total price must be specified). You can look up ExceptionCode values in the SOAP API Developer Guide.---This error occurred when the flow tried to create records: FIELD_INTEGRITY_EXCEPTION: field integrity exception: unknown (total price must be specified). You can look up ExceptionCode values in the SOAP API Developer Guide.---This error occurred when the flow tried to create records: FIELD_INTEGRITY_EXCEPTION: field integrity exception: unknown (total price must be specified). You can look up ExceptionCode values in the SOAP API Developer Guide.
+Transaction Rolled Back
+Because an error occurred, any records that the flow was ready to create, update, or delete weren’t committed to the database.

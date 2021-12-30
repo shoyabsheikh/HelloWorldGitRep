@@ -1,0 +1,492 @@
+Microsoft Windows [Version 10.0.19042.1348]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\shoyab.sheikh>cd Case24446632
+
+C:\Users\shoyab.sheikh\Case24446632>sfdx force:auth:web:login --dev-debug
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8 +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\package.json +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\oclif.manifest.json +5ms
+  @oclif/config:sfdx-cli using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\oclif.manifest.json +0ms
+  @oclif/config reading user plugins pjson C:\Users\shoyab.sheikh\AppData\Local\sfdx\package.json +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\package.json +2ms
+  @oclif/config loading plugins [
+  '@oclif/plugin-autocomplete',
+  '@oclif/plugin-commands',
+  '@oclif/plugin-help',
+  '@oclif/plugin-not-found',
+  '@oclif/plugin-plugins',
+  '@oclif/plugin-update',
+  '@oclif/plugin-warn-if-update-available',
+  '@oclif/plugin-which',
+  '@salesforce/plugin-alias',
+  '@salesforce/plugin-apex',
+  '@salesforce/plugin-auth',
+  '@salesforce/plugin-config',
+  '@salesforce/plugin-custom-metadata',
+  '@salesforce/plugin-data',
+  '@salesforce/plugin-generator',
+  '@salesforce/plugin-limits',
+  '@salesforce/plugin-org',
+  '@salesforce/plugin-source',
+  '@salesforce/plugin-schema',
+  '@salesforce/plugin-telemetry',
+  '@salesforce/plugin-templates',
+  '@salesforce/plugin-trust',
+  '@salesforce/plugin-user',
+  '@salesforce/sfdx-plugin-lwc-test',
+  'salesforce-alm'
+] +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-autocomplete +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-autocomplete\package.json +11ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-commands +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-commands\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-help +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-help\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-not-found +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-not-found\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-plugins +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-plugins\package.json +0ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-update +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-update\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-warn-if-update-available +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-warn-if-update-available\package.json +0ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-which +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-which\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-alias +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-alias\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-apex +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-apex\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-auth +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-auth\package.json +0ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-config +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-config\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-custom-metadata +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-custom-metadata\package.json +0ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-data +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-data\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-generator +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-generator\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-limits +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-limits\package.json +0ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-org +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-org\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-source +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-source\package.json +0ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-schema +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-schema\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-telemetry +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-telemetry\package.json +0ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-templates +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-templates\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-trust +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-trust\package.json +3ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-user +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-user\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\sfdx-plugin-lwc-test +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\sfdx-plugin-lwc-test\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\salesforce-alm +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\salesforce-alm\package.json +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-autocomplete\oclif.manifest.json +3ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-help\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-plugins\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-commands\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-warn-if-update-available\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-not-found\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-which\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-update\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-alias\oclif.manifest.json +4ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-auth\oclif.manifest.json +2ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-apex\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-custom-metadata\oclif.manifest.json +2ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-generator\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-data\oclif.manifest.json +2ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-config\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-org\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-limits\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-schema\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-templates\oclif.manifest.json +4ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-telemetry\oclif.manifest.json +2ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-trust\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\sfdx-plugin-lwc-test\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-source\oclif.manifest.json +2ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-user\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\salesforce-alm\oclif.manifest.json +7ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-generator\.oclif.manifest.json +1ms
+  @oclif/config:@oclif/plugin-autocomplete using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-autocomplete\oclif.manifest.json +0ms
+  @oclif/config:@oclif/plugin-warn-if-update-available using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-warn-if-update-available\oclif.manifest.json +0ms
+  @oclif/config:@oclif/plugin-plugins using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-plugins\oclif.manifest.json +0ms
+  @oclif/config:@oclif/plugin-help using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-help\oclif.manifest.json +0ms
+  @oclif/config:@oclif/plugin-commands using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-commands\oclif.manifest.json +0ms
+  @oclif/config:@oclif/plugin-not-found using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-not-found\oclif.manifest.json +0ms
+  @oclif/config:@oclif/plugin-which using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-which\oclif.manifest.json +0ms
+  @oclif/config:@oclif/plugin-update using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-update\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/plugin-alias using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-alias\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/plugin-custom-metadata using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-custom-metadata\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/plugin-auth using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-auth\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/plugin-apex using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-apex\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/plugin-data using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-data\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/plugin-config using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-config\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/plugin-limits using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-limits\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/plugin-org using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-org\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/plugin-schema using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-schema\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/plugin-telemetry using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-telemetry\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/plugin-user using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-user\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/plugin-templates using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-templates\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/plugin-trust using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-trust\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/sfdx-plugin-lwc-test using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\sfdx-plugin-lwc-test\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/plugin-source using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-source\oclif.manifest.json +0ms
+  @oclif/config:@salesforce/plugin-generator using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-generator\.oclif.manifest.json +0ms
+  @oclif/config loading plugins [
+  '@oclif/plugin-help',
+  '@oclif/plugin-warn-if-update-available',
+  '@oclif/plugin-not-found'
+] +85ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-generator\package.json +13ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-generator\package.json +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-generator\package.json +0ms
+  @oclif/config:salesforce-alm using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\salesforce-alm\oclif.manifest.json +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\package.json +5ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\package.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\package.json +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\package.json +0ms  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\package.json +1ms  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\package.json +0ms  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-warn-if-update-available +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-warn-if-update-available\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-help +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-help\package.json +1ms
+  @oclif/config reading core plugin C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-not-found +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-not-found\package.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-not-found\oclif.manifest.json +1ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-warn-if-update-available\oclif.manifest.json +0ms
+  @oclif/config loadJSON C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-help\oclif.manifest.json +1ms
+  @oclif/config:@oclif/plugin-warn-if-update-available using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-warn-if-update-available\oclif.manifest.json +0ms
+  @oclif/config:@oclif/plugin-not-found using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-not-found\oclif.manifest.json +0ms
+  @oclif/config:@oclif/plugin-help using manifest from C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-help\oclif.manifest.json +0ms
+  @oclif/config config done +15ms
+  sfdx                        OS: +0ms
+  sfdx                  platform: win32 +0ms
+  sfdx              architecture: x64 +1ms
+  sfdx                   release: 10.0.19042 +0ms
+  sfdx                     shell: cmd.exe +0ms
+  sfdx                      NODE: +1ms
+  sfdx                   version: 16.13.0 +0ms
+  sfdx                       CLI: +0ms
+  sfdx                   version: 7.125.0 +0ms
+  sfdx                   channel: stable +1ms
+  sfdx                       bin: sfdx +2ms
+  sfdx                      data: C:\Users\shoyab.sheikh\AppData\Local\sfdx +1ms
+  sfdx                     cache: C:\Users\shoyab.sheikh\AppData\Local\sfdx +0ms
+  sfdx                    config: C:\Users\shoyab.sheikh\AppData\Local\sfdx +0ms
+  sfdx                       ENV: +1ms
+  sfdx              NODE_OPTIONS: <not set> +0ms
+  sfdx   SFDX_AUTOUPDATE_DISABLE: <not set> +0ms
+  sfdx              SFDX_BINPATH: C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\bin\sfdx +0ms
+  sfdx        SFDX_COMPILE_CACHE: <not set> +1ms
+  sfdx   SFDX_DISABLE_AUTOUPDATE: <not set> +0ms
+  sfdx                  SFDX_ENV: development +0ms
+  sfdx            SFDX_INSTALLER: true +0ms
+  sfdx    SFDX_LAZY_LOAD_MODULES: true +1ms
+  sfdx         SFDX_NPM_REGISTRY: <not set> +0ms
+  sfdx           SFDX_REDIRECTED: 1 +0ms
+  sfdx              SFDX_S3_HOST: <not set> +0ms
+  sfdx  SFDX_UPDATE_INSTRUCTIONS: <not set> +1ms
+  sfdx                      ARGS: +0ms
+  sfdx                         0: C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\bin\node.exe +0ms
+  sfdx                         1: C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\bin\run +1ms
+  sfdx                         2: force:auth:web:login +0ms
+  lazy-require loading type cache from C:\Users\shoyab.sheikh\AppData\Local\sfdx\module-types.json +0ms
+  lazy-require loaded type cache +0ms
+  lazy-require parsing type cache +0ms
+  lazy-require parsed type cache +4ms
+  lazy-require enabled +1ms
+  @oclif/config start init hook +22ms
+  sfdx:@oclif/plugin-warn-if-update-available:hooks:init start C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-warn-if-update-available\lib\hooks\init\check-update +0ms
+  sfdx:@oclif/plugin-update:hooks:init start C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@oclif\plugin-update\lib\hooks\init +0ms
+  sfdx:@salesforce/plugin-config:hooks:init start C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-config\lib\hooks\init\load_config_meta +0ms
+  sfdx:core TRACE Setup child 'core:config' logger instance +0ms
+  sfdx:core TRACE Setup child 'plugin-config:load_config_meta' logger instance +26ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for sfdx-cli +0ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @oclif/plugin-autocomplete +0ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @oclif/plugin-warn-if-update-available +1ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @oclif/plugin-plugins +0ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @oclif/plugin-help +1ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @oclif/plugin-commands +1ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @oclif/plugin-not-found +0ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @oclif/plugin-which +1ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @oclif/plugin-update +0ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/plugin-alias +1ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/plugin-custom-metadata +0ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/plugin-auth +1ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/plugin-apex +0ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/plugin-data +1ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/plugin-config +0ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/plugin-limits +0ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/plugin-org +1ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/plugin-schema +0ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/plugin-telemetry +0ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/plugin-user +1ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/plugin-templates +0ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/plugin-trust +0ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/sfdx-plugin-lwc-test +1ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/plugin-source +0ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for @salesforce/plugin-generator +0ms
+  sfdx:plugin-config:load_config_meta INFO No config meta found for salesforce-alm +0ms
+  sfdx:@salesforce/plugin-telemetry:hooks:init start C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-telemetry\lib\hooks\telemetryInit.js +0ms
+  sfdx:@salesforce/plugin-config:hooks:init done +254ms
+  sfdx:@salesforce/plugin-telemetry:hooks:init done +2ms
+  sfdx:@oclif/plugin-update:hooks:init done +313ms
+  sfdx:@oclif/plugin-warn-if-update-available:hooks:init done +371ms
+  @oclif/config init hook done +374ms
+  sfdx init version: @oclif/command@1.8.0 argv: [ 'force:auth:web:login' ] +0ms
+  @oclif/config runCommand force:auth:web:login [] +6ms
+  @oclif/config:@salesforce/plugin-auth require C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-auth\lib\commands\auth\web\login.js +426ms
+  sfdx:core TRACE Setup child 'core:config' logger instance +0ms
+  sfdx:core TRACE Setup child 'core:config' logger instance +0ms
+  @oclif/config start prerun hook +176ms
+  sfdx:@salesforce/plugin-telemetry:hooks:prerun start C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-telemetry\lib\hooks\telemetryPrerun.js +0ms
+  sfdx:core TRACE Setup child 'core:config' logger instance +0ms
+  sfdx:core TRACE Setup child 'Config' logger instance +34ms
+  sfdx:core TRACE Setup child 'Config' logger instance +2ms
+  sfdx:Config INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\sfdx-config.json +0ms
+  sfdx:Config INFO Reading config file: C:\Users\shoyab.sheikh\Case24446632\.sfdx\sfdx-config.json +3ms
+  sfdx:telemetry@1.2.8 Usage acknowledgement file already exists +0ms
+  sfdx:telemetry@1.2.8 Using telemetry logging file C:\Users\SHOYAB~1.SHE\AppData\Local\Temp\3\sfdx-telemetry\telemetry-b5c88e7c6643cf9a74aca0843166fa5dbddbad9e.log +4ms
+  sfdx:telemetry@1.2.8 Setting up process exit handler +2ms
+  sfdx:@salesforce/plugin-telemetry:hooks:prerun done +105ms
+  @oclif/config prerun hook done +110ms
+  sfdx:core TRACE Setup child 'Login' logger instance +227ms
+  sfdx:auth:web:login init version: @oclif/command@1.8.0 argv: [] +0ms
+  sfdx:Login INFO Running command [Login] with flags [{"loglevel":"warn"}] and args [{}] +0ms
+  sfdx:core TRACE Setup child 'Config' logger instance +44ms
+  sfdx:core TRACE Setup child 'Config' logger instance +3ms
+  sfdx:Config INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\sfdx-config.json +0ms
+  sfdx:Config INFO Reading config file: C:\Users\shoyab.sheikh\Case24446632\.sfdx\sfdx-config.json +1ms
+  sfdx:core TRACE Setup child 'Common' logger instance +200ms
+  sfdx:core TRACE Setup child 'SfdxProjectJson' logger instance +3ms
+  sfdx:SfdxProjectJson INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\sfdx-project.json +0ms
+  sfdx:core TRACE Setup child 'SfdxProjectJson' logger instance +3ms
+  sfdx:SfdxProjectJson INFO Reading config file: C:\Users\shoyab.sheikh\Case24446632\sfdx-project.json +2ms
+  sfdx:core TRACE Setup child 'Config' logger instance +2ms
+  sfdx:core TRACE Setup child 'Config' logger instance +2ms
+  sfdx:Config INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\sfdx-config.json +0ms
+  sfdx:SfdxProjectJson TRACE Setup child 'SchemaValidator' logger instance +7ms
+  sfdx:Config INFO Reading config file: C:\Users\shoyab.sheikh\Case24446632\.sfdx\sfdx-config.json +5ms
+  sfdx:SfdxProjectJson TRACE Setup child 'SchemaValidator' logger instance +4ms
+  sfdx:SchemaValidator DEBUG Schema loaded for C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\schemas\sfdx-project.schema.json +0ms
+  sfdx:SfdxProjectJson WARN The config file: C:\Users\shoyab.sheikh\.sfdx\sfdx-project.json is not schema valid
+  sfdx:SfdxProjectJson Due to: Validation errors:
+  sfdx:SfdxProjectJson should have required property 'packageDirectories' +18ms
+  sfdx:SchemaValidator DEBUG Schema loaded for C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\schemas\sfdx-project.schema.json +17ms
+  sfdx:SfdxProjectJson INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\sfdx-project.json +4ms
+  sfdx:SfdxProjectJson INFO Reading config file: C:\Users\shoyab.sheikh\Case24446632\sfdx-project.json +1ms
+  sfdx:SfdxProjectJson TRACE Setup child 'SchemaValidator' logger instance +1ms
+  sfdx:SfdxProjectJson TRACE Setup child 'SchemaValidator' logger instance +2ms
+  sfdx:SchemaValidator DEBUG Schema loaded for C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\schemas\sfdx-project.schema.json +7ms
+  sfdx:SfdxProjectJson WARN The config file: C:\Users\shoyab.sheikh\.sfdx\sfdx-project.json is not schema valid
+  sfdx:SfdxProjectJson Due to: Validation errors:
+  sfdx:SfdxProjectJson should have required property 'packageDirectories' +3ms
+  sfdx:SchemaValidator DEBUG Schema loaded for C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\schemas\sfdx-project.schema.json +5ms
+  sfdx:Common DEBUG loginUrl: https://login.salesforce.com +0ms
+  sfdx:core TRACE Setup child 'WebOAuthServer' logger instance +44ms
+  sfdx:core TRACE Setup child 'SfdxProjectJson' logger instance +1ms
+  sfdx:SfdxProjectJson INFO Reading config file: C:\Users\shoyab.sheikh\Case24446632\sfdx-project.json +9ms
+  sfdx:SfdxProjectJson TRACE Setup child 'SchemaValidator' logger instance +2ms
+  sfdx:SchemaValidator DEBUG Schema loaded for C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\schemas\sfdx-project.schema.json +10ms
+  sfdx:core TRACE Setup child 'WebServer' logger instance +9ms
+  sfdx:WebServer DEBUG Starting web server +0ms
+  sfdx:WebServer DEBUG Nothing listening on host: localhost port: 1717 - good! +16ms
+  sfdx:WebOAuthServer DEBUG OAuth web login service listening on port: 1717 +0ms
+  sfdx:WebOAuthServer DEBUG Starting web auth flow +1ms
+  sfdx:WebServer DEBUG socket connection initialized from 127.0.0.1 +10s
+  sfdx:WebServer DEBUG socket connection initialized from 127.0.0.1 +1ms
+  sfdx:WebOAuthServer DEBUG processing request for uri: /OauthRedirect +10s
+  sfdx:WebOAuthServer DEBUG request.query.state: badd128d695e +1ms
+  sfdx:WebOAuthServer DEBUG Successfully obtained auth code: ...ebg== +1ms
+  sfdx:WebOAuthServer DEBUG oauthConfig.loginUrl: https://login.salesforce.com +0ms
+  sfdx:WebOAuthServer DEBUG oauthConfig.clientId: PlatformCLI +0ms
+  sfdx:WebOAuthServer DEBUG oauthConfig.redirectUri: http://localhost:1717/OauthRedirect +1ms
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +10s
+  sfdx:core TRACE Setup child 'crypto' logger instance +1ms
+  sfdx:crypto DEBUG retryStatus: undefined +0ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +3ms
+  sfdx:keyChain DEBUG platform: win32 +0ms
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +3ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +0ms
+  sfdx:AuthInfo INFO Exchanging auth code for access token using loginUrl: https://login.salesforce.com +0ms
+  sfdx:WebServer DEBUG socket connection initialized from 127.0.0.1 +247ms
+  sfdx:AuthInfo INFO Sending request for Username after successful auth code exchange to URL: https://demomatrix-dev-ed.my.salesforce.com/services/oauth2/userinfo +1s
+  sfdx:AuthInfo INFO Sending request for User SObject after successful auth code exchange to URL: https://demomatrix-dev-ed.my.salesforce.com//services/data/v51.0/sobjects/User/005B0000004jErHIAU +1s
+  sfdx:AuthInfo INFO Updated auth info for username: shoyab.sheikh-oyym@force.com +955ms
+  sfdx:AuthInfo DEBUG  +0ms
+  sfdx:core TRACE Setup child 'AuthInfoConfig' logger instance +3s
+  sfdx:AuthInfoConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\shoyab.sheikh-oyym@force.com.json +0ms
+  sfdx:AuthInfoConfig INFO Writing to config file: C:\Users\shoyab.sheikh\.sfdx\shoyab.sheikh-oyym@force.com.json +5ms
+  sfdx:AuthInfo INFO Saved auth info for username: shoyab.sheikh-oyym@force.com +10ms
+  sfdx:WebOAuthServer DEBUG closing server connection +3s
+  sfdx:core TRACE Setup child 'Common' logger instance +12ms
+  sfdx:WebServer DEBUG number of connections open: 0 +3s
+  sfdx:Common DEBUG getting devHubs from authfiles +13s
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +4ms
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +1ms
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +0ms
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +2ms
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +1ms
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +1ms
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +1ms
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +1ms
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +0ms
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +2ms
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +1ms
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +1ms
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +0ms
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +1ms
+  sfdx:core TRACE Setup child 'crypto' logger instance +1ms
+  sfdx:core TRACE Setup child 'crypto' logger instance +1ms
+  sfdx:core TRACE Setup child 'crypto' logger instance +1ms
+  sfdx:core TRACE Setup child 'crypto' logger instance +1ms
+  sfdx:core TRACE Setup child 'crypto' logger instance +1ms
+  sfdx:core TRACE Setup child 'crypto' logger instance +1ms
+  sfdx:core TRACE Setup child 'crypto' logger instance +1ms
+  sfdx:core TRACE Setup child 'crypto' logger instance +1ms
+  sfdx:core TRACE Setup child 'crypto' logger instance +0ms
+  sfdx:core TRACE Setup child 'crypto' logger instance +1ms
+  sfdx:core TRACE Setup child 'crypto' logger instance +1ms
+  sfdx:core TRACE Setup child 'crypto' logger instance +1ms
+  sfdx:core TRACE Setup child 'crypto' logger instance +0ms
+  sfdx:core TRACE Setup child 'crypto' logger instance +1ms
+  sfdx:crypto DEBUG retryStatus: undefined +3s
+  sfdx:crypto DEBUG retryStatus: undefined +0ms
+  sfdx:crypto DEBUG retryStatus: undefined +1ms
+  sfdx:crypto DEBUG retryStatus: undefined +0ms
+  sfdx:crypto DEBUG retryStatus: undefined +0ms
+  sfdx:crypto DEBUG retryStatus: undefined +0ms
+  sfdx:crypto DEBUG retryStatus: undefined +1ms
+  sfdx:crypto DEBUG retryStatus: undefined +0ms
+  sfdx:crypto DEBUG retryStatus: undefined +0ms
+  sfdx:crypto DEBUG retryStatus: undefined +0ms
+  sfdx:crypto DEBUG retryStatus: undefined +1ms
+  sfdx:crypto DEBUG retryStatus: undefined +0ms
+  sfdx:crypto DEBUG retryStatus: undefined +0ms
+  sfdx:crypto DEBUG retryStatus: undefined +0ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +4ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +1ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +1ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +1ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +1ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +1ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +0ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +1ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +1ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +1ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +1ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +1ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +1ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +0ms
+  sfdx:keyChain DEBUG platform: win32 +3s
+  sfdx:keyChain DEBUG platform: win32 +1ms
+  sfdx:keyChain DEBUG platform: win32 +0ms
+  sfdx:keyChain DEBUG platform: win32 +0ms
+  sfdx:keyChain DEBUG platform: win32 +0ms
+  sfdx:keyChain DEBUG platform: win32 +0ms
+  sfdx:keyChain DEBUG platform: win32 +1ms
+  sfdx:keyChain DEBUG platform: win32 +0ms
+  sfdx:keyChain DEBUG platform: win32 +1ms
+  sfdx:keyChain DEBUG platform: win32 +0ms
+  sfdx:keyChain DEBUG platform: win32 +0ms
+  sfdx:keyChain DEBUG platform: win32 +0ms
+  sfdx:keyChain DEBUG platform: win32 +0ms
+  sfdx:keyChain DEBUG platform: win32 +1ms
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +6ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +3s
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +2ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +1ms
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +1ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +2ms
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +1ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +1ms
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +2ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +1ms
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +3ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +4ms
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +1ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +1ms
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +2ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +1ms
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +1ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +1ms
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +2ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +2ms
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +1ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +1ms
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +1ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +1ms
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +1ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +1ms
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +1ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +1ms
+  sfdx:core TRACE Setup child 'AuthInfoConfig' logger instance +2ms
+  sfdx:AuthInfoConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\developerorgdec@dev.com.json +77ms
+  sfdx:core TRACE Setup child 'AuthInfoConfig' logger instance +2ms
+  sfdx:AuthInfoConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\roriordan@ossur.com.staging.json +2ms
+  sfdx:core TRACE Setup child 'AuthInfoConfig' logger instance +1ms
+  sfdx:AuthInfoConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\shoyabpackagingorg@dev.com.json +1ms
+  sfdx:core TRACE Setup child 'AuthInfoConfig' logger instance +1ms
+  sfdx:AuthInfoConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\roriordan@ossur.com.v34test.json +2ms
+  sfdx:core TRACE Setup child 'AuthInfoConfig' logger instance +4ms
+  sfdx:AuthInfoConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\test-bvcrrxnxqwup@example.com.json +3ms
+  sfdx:AuthInfo INFO Updated auth info for username: shoyab.sheikh-oyym@force.com +82ms
+  sfdx:core TRACE Setup child 'AuthInfoConfig' logger instance +2ms
+  sfdx:AuthInfoConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\test-e8fbg4bd9w78@example.com.json +2ms
+  sfdx:core TRACE Setup child 'AuthInfoConfig' logger instance +1ms
+  sfdx:AuthInfoConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\shoyabwin21@demorg.com.json +2ms
+  sfdx:core TRACE Setup child 'AuthInfoConfig' logger instance +2ms
+  sfdx:AuthInfoConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\test-ecya7vyoyj5p@example.com.json +1ms
+  sfdx:core TRACE Setup child 'AuthInfoConfig' logger instance +1ms
+  sfdx:AuthInfoConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\test-fxtdsfg5iynf@example.com.json +1ms
+  sfdx:core TRACE Setup child 'AuthInfoConfig' logger instance +1ms
+  sfdx:AuthInfoConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\test-hynyuiz1humq@example.com.json +1ms
+  sfdx:core TRACE Setup child 'AuthInfoConfig' logger instance +1ms
+  sfdx:AuthInfoConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\test-oeochseiw9c7@example.com.json +2ms
+  sfdx:core TRACE Setup child 'AuthInfoConfig' logger instance +2ms
+  sfdx:AuthInfoConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\test-wgjgzdyxkrgr@example.com.json +2ms
+  sfdx:core TRACE Setup child 'AuthInfoConfig' logger instance +2ms
+  sfdx:AuthInfoConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\test-zfalg38x71se@example.com.json +1ms
+  sfdx:AuthInfo INFO Updated auth info for username: roriordan@ossur.com.staging +12ms
+  sfdx:AuthInfo INFO Updated auth info for username: roriordan@ossur.com.v34test +0ms
+  sfdx:AuthInfo INFO Updated auth info for username: developerorgdec@dev.com +1ms
+  sfdx:AuthInfo INFO Updated auth info for username: shoyabpackagingorg@dev.com +0ms
+  sfdx:AuthInfo INFO Updated auth info for username: test-e8fbg4bd9w78@example.com +1ms
+  sfdx:AuthInfo INFO Updated auth info for username: test-bvcrrxnxqwup@example.com +0ms
+  sfdx:AuthInfo INFO Updated auth info for username: shoyabwin21@demorg.com +0ms
+  sfdx:AuthInfo INFO Updated auth info for username: test-ecya7vyoyj5p@example.com +1ms
+  sfdx:AuthInfo INFO Updated auth info for username: test-hynyuiz1humq@example.com +0ms
+  sfdx:AuthInfo INFO Updated auth info for username: test-fxtdsfg5iynf@example.com +0ms
+  sfdx:AuthInfo INFO Updated auth info for username: test-oeochseiw9c7@example.com +1ms
+  sfdx:AuthInfo INFO Updated auth info for username: test-wgjgzdyxkrgr@example.com +0ms
+  sfdx:AuthInfo INFO Updated auth info for username: test-zfalg38x71se@example.com +0ms
+  sfdx:Common DEBUG found 1 DevHubs +94ms
+  sfdx:core TRACE Setup child 'Org' logger instance +7ms
+  sfdx:core TRACE Setup child 'Aliases' logger instance +1ms
+  sfdx:Aliases INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\alias.json +0ms
+  sfdx:core TRACE Setup child 'AuthInfo' logger instance +1ms
+  sfdx:core TRACE Setup child 'crypto' logger instance +1ms
+  sfdx:crypto DEBUG retryStatus: undefined +69ms
+  sfdx:core TRACE Setup child 'keyChain' logger instance +2ms
+  sfdx:keyChain DEBUG platform: win32 +55ms
+  sfdx:core TRACE Setup child 'KeychainConfig' logger instance +2ms
+  sfdx:KeychainConfig INFO Reading config file: C:\Users\shoyab.sheikh\.sfdx\key.json +36ms
+  sfdx:AuthInfo INFO Updated auth info for username: developerorgdec@dev.com +10ms
+  sfdx:AuthInfo INFO Returning fields for a connection using OAuth config. +1ms
+  sfdx:core TRACE Setup child 'connection' logger instance +5ms
+  sfdx:connection DEBUG Last checked on 12/8/2021, 8:11:42 pm (now is 15/11/2021, 3:21:10 pm) - not getting latest +0ms
+  sfdx:connection DEBUG Loaded latest apiVersion 52.0 +0ms
+  sfdx:connection DEBUG Using apiVersion 52.0 +1ms
+  sfdx:connection DEBUG request: {"method":"GET","url":"https://decdev-dev-ed.my.salesforce.com/services/data/v52.0/query?q=select%20Id%20from%20ScratchOrgInfo%20where%20ScratchOrg%20%3D%20'00DB00000005aWn'","headers":{"content-type":"application/json","user-agent":"sfdx toolbelt:"}} +1ms
+Successfully authorized shoyab.sheikh-oyym@force.com with org ID 00DB00000005aWnMAI
+  sfdx:Login INFO Successfully authorized shoyab.sheikh-oyym@force.com with org ID 00DB00000005aWnMAI +14s
+  @oclif/config start postrun hook +14s
+  @oclif/config postrun hook done +4ms
+  lazy-require saving type cache to C:\Users\shoyab.sheikh\AppData\Local\sfdx\module-types.json +15s
+  lazy-require no changes to save +1ms
+  sfdx:telemetry@1.2.8 Spawning "C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\bin\node.exe C:\Users\shoyab.sheikh\AppData\Local\sfdx\client\7.125.0-8568dc8\node_modules\@salesforce\plugin-telemetry\processes\upload C:\Users\shoyab.sheikh\AppData\Local\sfdx C:\Users\SHOYAB~1.SHE\AppData\Local\Temp\3\sfdx-telemetry\telemetry-b5c88e7c6643cf9a74aca0843166fa5dbddbad9e.log" +14s
+
+C:\Users\shoyab.sheikh\Case24446632>
